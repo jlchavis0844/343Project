@@ -1,8 +1,6 @@
 package termProject;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -12,10 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.JTextArea;
-import javax.swing.JScrollBar;
 
 
 public class GameBoard extends JFrame {
@@ -73,5 +68,34 @@ public class GameBoard extends JFrame {
 		consoleBox.setBounds(715, 938, 1159, 72);
 		contentPane.add(consoleBox);
 
+	}
+	
+	public Room[] buildRooms(int SIZE ){
+		Room[] temp = new Room[SIZE];
+		
+		Room room0 = new Room("George All Field",0);
+		Room room1 = new Room("Japanese Garden",1);
+		Room room2= new Room("Student Parking",2);
+		Room room3 = new Room("The Pyramid",3);
+		Room room4 = new Room("West Walkway",4);
+		Room room5 = new Room("Health Center",5);
+		Room room6 = new Room("Forbidden Parking",6);
+		Room room7 = new Room("Library",7);
+		Room room8 = new Room("LA 5",8);
+		Room room9 = new Room("Brautwurst Hall",9);
+		Room room10 = new Room("East Walkway",10);
+		Room room11 = new Room("Computer Lab",11);
+		Room room12 = new Room("North Hall",12);
+		Room room13 = new Room("Room of Retirement",13);
+		Room room14 = new Room("ECS 302",14);
+		Room room15 = new Room("South Hall",15);
+		Room room16 = new Room("Elevators",16);
+		Room room17 = new Room("ECS 308",17);
+		Room room18 = new Room("EAT Club",18);
+		Room room19 = new Room("Confrence Room",19);
+		Room room20 = new Room("Lactation Lounge",20);
+		
+		return temp;
+		
 	}
 }

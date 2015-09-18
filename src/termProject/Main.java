@@ -19,6 +19,7 @@ public class Main {
 				}//end try catch
 			}//end thread
 		});//end EventQueue
+				
 	}//end main function
 
 }//end main class
