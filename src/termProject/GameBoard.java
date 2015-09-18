@@ -15,27 +15,12 @@ import javax.swing.border.BevelBorder;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
+import javax.swing.JScrollBar;
 
 
 public class GameBoard extends JFrame {
 	private JScrollPane scrollPane;
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GameBoard frame = new GameBoard();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -59,10 +44,10 @@ public class GameBoard extends JFrame {
 		scrollPane.setViewportView(boardBack);
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
-		JList list = new JList();
-		list.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		list.setBounds(10, 721, 252, 289);
-		contentPane.add(list);
+		JList moveBox = new JList();
+		moveBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		moveBox.setBounds(10, 721, 252, 289);
+		contentPane.add(moveBox);
 		
 		JButton drawBtn = new JButton("Draw New Card");
 		drawBtn.setBounds(284, 721, 211, 64);
@@ -87,11 +72,6 @@ public class GameBoard extends JFrame {
 		consoleBox.setEditable(false);
 		consoleBox.setBounds(715, 938, 1159, 72);
 		contentPane.add(consoleBox);
-		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon(GameBoard.class.getResource("/termProject/test.png")));
-		lblNewLabel.setBounds(505, 721, 200, 281);
-		contentPane.add(lblNewLabel);
 
 	}
 }
