@@ -1,12 +1,15 @@
 package termProject;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 /**
  * Room that players can move to 
- * @params ArrayList<Integers> neighbors - array to hold list of neighbors
- * @params int roomNum - identifies specific rooms using a number
- * @params int String roomName - Abstracted room identifier
+ * @param ArrayList<Integers> neighbors - array to hold list of neighbors
+ * @param int roomNum - identifies specific rooms using a number
+ * @param int String roomName - Abstracted room identifier
+ * @param int x starting room x location
+ * @param int y starting room y location
  * @author James
  *v 1.0
  */
@@ -14,13 +17,17 @@ public class Room {
 	private ArrayList<Integer> neighbors;
 	private int roomNum;
 	private String roomName;
+	private int x;
+	private int y;
 
 	/**
 	 * constructor with name and number for the room
 	 * @param rName - name of the rooms
 	 * @param rNum - number of the room
 	 */
-	public Room(String rName, int rNum){
+	public Room(int x, int y, String rName, int rNum){
+		this.x = x;
+		this.y = y;
 		roomName = rName;
 		roomNum = rNum;
 		neighbors = new ArrayList<Integer>();
@@ -43,8 +50,9 @@ public class Room {
 	}
 	
 	public void addNeighbor(int nRooms[]){
-		for (int i = 0; i < nRooms.length; i++){
-			neighbors.add(nRooms[i]);
+		neighbors.clear();
+		for (int i: nRooms){
+			neighbors.add(i);
 		}
 	}
 	
@@ -56,6 +64,16 @@ public class Room {
 		return neighbors;
 	}
 	
+	public int getX(){
+		return x;
+	}
 	
+	public int getY(){
+		return y;
+	}
 	
+	public void setLocation(Point p){
+		x = (int)p.getX();
+		y = (int)p.getY();
+	}
 }//end class
