@@ -15,19 +15,37 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
+import java.util.Random;
 
-
+/**
+ * JPanel constructor used to draw game board and run most game functions
+ * @author James
+ *
+ */
 public class GameBoard extends JFrame {
-	private JScrollPane scrollPane;
-	private JPanel contentPane;
-	int test;
-
+	private JScrollPane scrollPane;//the scroll pane for the background
+	private JPanel contentPane; //the panel for all the goodies
+	int human; //tracks the array index of the player being used as the user player
+	Room roomArr[]; //holds all the rooms
+	Player players[];//holds the 3 players
+	JLabel playerMarker0; //label for player #1
+	JLabel playerMarker1; //label for player #1
+	JLabel playerMarker2; //label for player #1
+	JButton moveBtn;//the button to move players
+	JList moveBox; //list of possible moves for the player
+	
+//TODO: move all object decleratios outside constructor
+//TODO: consider adding rooms as an enumerated class
+	
 	/**
 	 * Create the frame.
 	 */
+	@SuppressWarnings("unchecked")
 	public GameBoard() {
+		
+		roomArr = buildRooms(21);//load all the rooms
+		players = makePlayers();//load the players
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(10, 10, 1900, 1060);
 		contentPane = new JPanel();
@@ -38,20 +56,20 @@ public class GameBoard extends JFrame {
 		JLabel boardBack = new JLabel("Game Background");
 		boardBack.setIcon(new ImageIcon(GameBoard.class.getResource("/termProject/graphics/CSULBMap3.png")));
 		
-		JLabel playerMarker1 = new JLabel("player1");
+		playerMarker0 = new JLabel("player1");
+		playerMarker0.setIcon(new ImageIcon(GameBoard.class.getResource("/termProject/graphics/player1.jpg")));
+		playerMarker0.setBorder(new BevelBorder(BevelBorder.RAISED, Color.RED, null, null, null));
+		playerMarker0.setBounds(800, 1375, 55, 60);
+		
+		playerMarker1 = new JLabel("player2");
 		playerMarker1.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		playerMarker1.setForeground(Color.RED);
-		playerMarker1.setBounds(50, 50, 300, 30);
+		playerMarker1.setBounds(800, 1375+60, 300, 30);
 		
-		JLabel playerMarker2 = new JLabel("player2");
+		playerMarker2 = new JLabel("player3");
 		playerMarker2.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		playerMarker2.setForeground(Color.RED);
-		playerMarker2.setBounds(50, 80, 300, 30);
-		
-		JLabel playerMarker3 = new JLabel("player3");
-		playerMarker3.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		playerMarker3.setForeground(Color.RED);
-		playerMarker3.setBounds(50, 110, 300, 30);
+		playerMarker2.setBounds(800, 1375+90, 300, 30);
 		
 		scrollPane = new JScrollPane();
 		boardBack.setLabelFor(scrollPane);
@@ -59,9 +77,9 @@ public class GameBoard extends JFrame {
 		scrollPane.setViewportView(boardBack);
 		contentPane.add(scrollPane);
 		
+		boardBack.add(playerMarker0);
 		boardBack.add(playerMarker1);
 		boardBack.add(playerMarker2);
-		boardBack.add(playerMarker3);
 		
 		JScrollPane consoleScroll = new JScrollPane();
 		consoleScroll.setBounds(648, 938, 1226, 72);
@@ -70,16 +88,29 @@ public class GameBoard extends JFrame {
 		JTextArea consoleBox = new JTextArea();
 		consoleScroll.setViewportView(consoleBox);
 		
-		JList moveBox = new JList();
+		moveBox = new JList();
+		moveBox.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				moveBtn.setEnabled(!moveBox.isSelectionEmpty());
+			}
+		});
 		moveBox.setBounds(10, 721, 252, 289);
 		moveBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		moveBox.setListData(getNames(roomArr[17].getNeighbors()));
 		contentPane.add(moveBox);
 		
 		JButton drawBtn = new JButton("Draw New Card");
 		drawBtn.setBounds(272, 721, 145, 64);
 		contentPane.add(drawBtn);
 		
-		JButton moveBtn = new JButton("Move Player");
+		moveBtn = new JButton("Move Player");
+		moveBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				movePlayer((String)moveBox.getSelectedValue());
+			}
+		});
 		moveBtn.setBounds(272, 834, 145, 64);
 		moveBtn.setEnabled(!moveBox.isSelectionEmpty());
 		contentPane.add(moveBtn);
@@ -101,33 +132,8 @@ public class GameBoard extends JFrame {
 		cardLabel.setBounds(427, 721, 211, 289);
 		contentPane.add(cardLabel);
 		
-		Room roomArr[] = buildRooms(21);
-		
-		test = 0;
-		
-		
-	
-		/****************Test module******************/
-		JButton btnTest = new JButton("Step Through Classes");
-		btnTest.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				moveBox.setListData(getNames(roomArr[test].getNeighbors(),roomArr));
-				consoleBox.setText(consoleBox.getText() + "\n Room " + test + " out of " + roomArr.length);
-				playerMarker1.setLocation(roomArr[test].getX(), roomArr[test].getY());
-				playerMarker2.setLocation(roomArr[test].getX(), roomArr[test].getY()+30);
-				playerMarker3.setLocation(roomArr[test].getX(), roomArr[test].getY()+60);
-				//repaint();
-				if (test == roomArr.length-1){
-					test = 0;
-				} else {
-					test++;	
-				}
-			}
-		});
-		btnTest.setBounds(272, 796, 145, 23);
-		contentPane.add(btnTest);
-		/********************End Test Module*************/
+
+
 		
 	}//end constructor
 
@@ -157,7 +163,7 @@ public class GameBoard extends JFrame {
 		temp[7].addNeighbor(new int[]{8,4});
 		temp[8]  = new Room(480, 1780,"LA 5",8);
 		temp[8].addNeighbor(new int[]{7,9});
-		temp[9]  = new Room(1160, 1670, "Brautwurst Hall",9);
+		temp[9]  = new Room(1160, 1670, "Bratwurst Hall",9);
 		temp[9].addNeighbor(new int[]{10,8});
 		temp[10]  = new Room(1450, 963,"East Walkway",10);
 		temp[10].addNeighbor(new int[]{15,9});
@@ -170,14 +176,14 @@ public class GameBoard extends JFrame {
 		temp[14]  = new Room(590, 910,"ECS 302",14);
 		temp[14].addNeighbor(new int[]{12});
 		temp[15]  = new Room(820, 1150,"South Hall",15);
-		temp[15].addNeighbor(new int[]{14,18,19,10,20,17});
+		temp[15].addNeighbor(new int[]{14,18,19,10,20,17,12});
 		temp[16]  = new Room(590, 1390, "Elevators",16);
 		temp[16].addNeighbor(new int[]{12});
 		temp[17]  = new Room(800, 1375,"ECS 308",17);
 		temp[17].addNeighbor(new int[]{15});
 		temp[18]  = new Room(1020, 875, "EAT Club",18);
 		temp[18].addNeighbor(new int[]{15});
-		temp[19]  = new Room(1240, 870, "Confrence Room",19);
+		temp[19]  = new Room(1240, 870, "Conference Room",19);
 		temp[19].addNeighbor(new int[]{15});
 		temp[20]  = new Room(1200, 1390, "Lactation Lounge",20);
 		temp[20].addNeighbor(new int[]{15});
@@ -192,7 +198,7 @@ public class GameBoard extends JFrame {
 	 * @param roomArr Room[] the master list of rooms.
 	 * @return String[] an array of neighboring room names
 	 */
-	public String[] getNames(ArrayList<Integer> nList, Room roomArr[]){
+	public String[] getNames(ArrayList<Integer> nList){
 		String nNames[] = new String[nList.size()];
 		
 		for(int i = 0; i < nList.size(); i++){
@@ -204,6 +210,46 @@ public class GameBoard extends JFrame {
 		}//end out for loop
 		
 		return nNames;
+	}//end getNames
+	
+	/**
+	 * short function to build the three players and select random player1
+	 * @return Player[] - an array of three players
+	 */
+	public Player[] makePlayers(){
+		Player players[] = new Player[3];//make an array 3 spaces long
+		players[0] = new Player("James", 10,10,10);
+		players[1] = new Player("Sylvia", 10,10,10);
+		players[2] = new Player("Solidus", 10,10,10);
+		Random rand = new Random();//for the random num generator
+		human = rand.nextInt(3);// random number 0-2
+		
+		return players;//return the array
+	}
+	
+	/**
+	 * moves a player to the selected room
+	 * @param s Room name (String) that the player is moving to.
+	 */
+	@SuppressWarnings("unchecked")
+	public void movePlayer(String s){		
+		int rIndex = 0; //the index of the room that matches the 
+		
+		for(int i = 0; i < roomArr.length; i++){//finds matching room name
+			if(roomArr[i].getRoomName() == s) rIndex = i;//stores matches index
+		}
+
+		if(human == 0){//update location of the appropriate players label
+			playerMarker0.setLocation(roomArr[rIndex].getX(),roomArr[rIndex].getY());
+		} else if(human == 1){
+			playerMarker1.setLocation(roomArr[rIndex].getX(),roomArr[rIndex].getY()+60);
+		} else {
+			playerMarker2.setLocation(roomArr[rIndex].getX(),roomArr[rIndex].getY()+90);
+		}
+		
+		players[human].setRNumLocation(roomArr[rIndex].getRoomNum());//updates player room location
+		moveBox.setListData(getNames(roomArr[rIndex].getNeighbors()));//reloads move box
+		moveBtn.setEnabled(false);//disables move button
 	}
 	
 }

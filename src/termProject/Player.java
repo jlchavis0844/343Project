@@ -4,7 +4,7 @@ package termProject;
 /**
  * Player in the game and its attributes
  * @param String playerName - identifies the player by name
- * @param int learning - learning score
+ * @param learning - learning score
  * @param int craft - craft score
  * @param int integrity - integrity score
  * @param int qp - Quality Points score
@@ -120,7 +120,7 @@ public class Player {
 	 * set location 
 	 * @param rNum - room number
 	 */
-	public void setLocation(int rNum){
+	public void setRNumLocation(int rNum){
 		rNumLocation = rNum;
 	}
 	

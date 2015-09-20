@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Room that players can move to 
  * @param ArrayList<Integers> neighbors - array to hold list of neighbors
  * @param int roomNum - identifies specific rooms using a number
- * @param int String roomName - Abstracted room identifier
+ * @param String roomName - Abstracted room identifier
  * @param int x starting room x location
  * @param int y starting room y location
  * @author James
@@ -21,8 +21,9 @@ public class Room {
 	private int y;
 
 	/**
-	 * constructor with name and number for the room
-	 * @param rName - name of the rooms
+	 * constructor with location, name, and number for the room
+	 * @param x, y - location on GameBoard
+	 * @param rName - name of the room
 	 * @param rNum - number of the room
 	 */
 	public Room(int x, int y, String rName, int rNum){
@@ -41,14 +42,34 @@ public class Room {
 		roomName = rName;
 	}
 	
+	/**
+	 * set room number
+	 * @param rNum - room number
+	 */
 	public void setRNum(int rNum){
 		roomNum = rNum;
 	}
 	
+	/**
+	 * get room name
+	 * @return roomName - room name
+	 */
+	public String getRoomName(){
+		return roomName;
+	}
+	
+	/**
+	 * get room number
+	 * @return roomNum - room number
+	 */
 	public int getRoomNum(){
 		return roomNum;
 	}
 	
+	/**
+	 * add neighbor room numbers to ArrayList
+	 * @param nRooms[] - array of neighbors room number
+	 */
 	public void addNeighbor(int nRooms[]){
 		neighbors.clear();
 		for (int i: nRooms){
@@ -56,22 +77,34 @@ public class Room {
 		}
 	}
 	
-	public String getRoomName(){
-		return roomName;
-	}
-	
+	/**
+	 * get neighbor room numbers
+	 * @return neighbors - ArrayList of neighbors room number
+	 */
 	public ArrayList<Integer> getNeighbors(){
 		return neighbors;
 	}
 	
+	/**
+	 * get x location
+	 * @return x - x coordinate
+	 */
 	public int getX(){
 		return x;
 	}
 	
+	/**
+	 * get y location
+	 * @return y - y coordinate
+	 */
 	public int getY(){
 		return y;
 	}
 	
+	/**
+	 * set location 
+	 * @param p - x and y coordinate
+	 */
 	public void setLocation(Point p){
 		x = (int)p.getX();
 		y = (int)p.getY();
