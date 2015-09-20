@@ -33,8 +33,10 @@ public class GameBoard extends JFrame {
 	JLabel playerMarker2; //label for player #1
 	JButton moveBtn;//the button to move players
 	JList moveBox; //list of possible moves for the player
+	JTextArea consoleBox; //Scrolling updates
+	JScrollPane consoleScroll;//holds consoleBox so that the console scrolls
 	
-//TODO: move all object decleratios outside constructor
+//TODO: move all object declerations outside constructor
 //TODO: consider adding rooms as an enumerated class
 	
 	/**
@@ -43,9 +45,6 @@ public class GameBoard extends JFrame {
 	@SuppressWarnings("unchecked")
 	public GameBoard() {
 		
-		roomArr = buildRooms(21);//load all the rooms
-		players = makePlayers();//load the players
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(10, 10, 1900, 1060);
 		contentPane = new JPanel();
@@ -53,6 +52,18 @@ public class GameBoard extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		
+		consoleScroll = new JScrollPane();
+		consoleScroll.setBounds(648, 938, 1226, 72);
+		contentPane.add(consoleScroll);
+		
+		consoleBox = new JTextArea();
+		consoleScroll.setViewportView(consoleBox);
+		
+		roomArr = buildRooms(21);//load all the rooms
+		players = makePlayers();//load the players
+		
+
 		JLabel boardBack = new JLabel("Game Background");
 		boardBack.setIcon(new ImageIcon(GameBoard.class.getResource("/termProject/graphics/CSULBMap3.png")));
 		
@@ -81,13 +92,6 @@ public class GameBoard extends JFrame {
 		boardBack.add(playerMarker1);
 		boardBack.add(playerMarker2);
 		
-		JScrollPane consoleScroll = new JScrollPane();
-		consoleScroll.setBounds(648, 938, 1226, 72);
-		contentPane.add(consoleScroll);
-		
-		JTextArea consoleBox = new JTextArea();
-		consoleScroll.setViewportView(consoleBox);
-		
 		moveBox = new JList();
 		moveBox.addMouseListener(new MouseAdapter() {
 			@Override
@@ -108,7 +112,11 @@ public class GameBoard extends JFrame {
 		moveBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				movePlayer((String)moveBox.getSelectedValue());
+				if (moveBox.getSelectedValue() == null){
+					//TODO: just leave empty or add error message
+				}else {
+					movePlayer((String)moveBox.getSelectedValue());
+				}
 			}
 		});
 		moveBtn.setBounds(272, 834, 145, 64);
@@ -223,6 +231,7 @@ public class GameBoard extends JFrame {
 		players[2] = new Player("Solidus", 10,10,10);
 		Random rand = new Random();//for the random num generator
 		human = rand.nextInt(3);// random number 0-2
+		consoleBox.setText("\nThe Human player is " + players[human].getPName()+ " and is starting in ECS 308");
 		
 		return players;//return the array
 	}
@@ -250,6 +259,7 @@ public class GameBoard extends JFrame {
 		players[human].setRNumLocation(roomArr[rIndex].getRoomNum());//updates player room location
 		moveBox.setListData(getNames(roomArr[rIndex].getNeighbors()));//reloads move box
 		moveBtn.setEnabled(false);//disables move button
-	}
+		consoleBox.setText(consoleBox.getText() + "\nMoving " + players[human].getPName() + " to " + roomArr[rIndex].getRoomName());
+	}//end move player
 	
 }
