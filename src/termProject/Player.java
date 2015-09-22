@@ -131,5 +131,5 @@ public class Player {
 	public int getRNumLocation(){
 		return rNumLocation;
 	}
-
+	
 }

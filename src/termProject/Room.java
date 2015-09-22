@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *v 1.0
  */
 public class Room {
-	private ArrayList<Integer> neighbors;
+	private int[] neighbors;
 	private int roomNum;
 	private String roomName;
 	private int x;
@@ -31,7 +31,6 @@ public class Room {
 		this.y = y;
 		roomName = rName;
 		roomNum = rNum;
-		neighbors = new ArrayList<Integer>();
 	}
 	
 	/**
@@ -71,17 +70,14 @@ public class Room {
 	 * @param nRooms[] - array of neighbors room number
 	 */
 	public void addNeighbor(int nRooms[]){
-		neighbors.clear();
-		for (int i: nRooms){
-			neighbors.add(i);
-		}
+		neighbors = nRooms;
 	}
 	
 	/**
 	 * get neighbor room numbers
-	 * @return neighbors - ArrayList of neighbors room number
+	 * @return neighbors - int[] of neighbors room number
 	 */
-	public ArrayList<Integer> getNeighbors(){
+	public int[] getNeighbors(){
 		return neighbors;
 	}
 	
