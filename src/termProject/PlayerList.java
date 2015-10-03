@@ -15,7 +15,7 @@ import javax.swing.border.*;
  * This class builds 3 hard coded players (Player) and then builds 3 hardcoded
  * player markers (JLabel). The players are then stored in an array of players
  * and the player makers are stored in an array of JLabels. These arrays are 
- * returned to GameBoard via getPlayerList and getMarkers. movePlayer
+ * returned to GameView via getPlayerList and getMarkers. movePlayer
  * moves a player to a desired room
  * </p>
  * @author James
@@ -29,11 +29,11 @@ import javax.swing.border.*;
  */
 public class PlayerList {
 
-	Player players[];
-	JLabel pMarkers[];
-	JLabel playerMarker0;
-	JLabel playerMarker1;
-	JLabel playerMarker2;
+	private Player players[];
+	private JLabel pMarkers[];
+	private JLabel playerMarker0;
+	private JLabel playerMarker1;
+	private JLabel playerMarker2;
 	private int human; 
 	private int current; 
 	
@@ -50,7 +50,7 @@ public class PlayerList {
 		
 		//Make 3 playerMarkers
 		playerMarker0 = new JLabel("player1");
-		playerMarker0.setIcon(new ImageIcon(GameBoard.class.getResource("/termProject/graphics/player1.jpg")));
+		playerMarker0.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/player1.jpg")));
 		playerMarker0.setBorder(new BevelBorder(BevelBorder.RAISED, Color.RED, null, null, null));
 		playerMarker0.setBounds(800, 1375, 55, 60);
 		
@@ -60,7 +60,7 @@ public class PlayerList {
 		playerMarker1.setBounds(800, 1375+60, 300, 30);
 		
 		playerMarker2 = new JLabel("player3");
-		playerMarker2.setIcon(new ImageIcon(GameBoard.class.getResource("/termProject/graphics/hoffman.jpg")));
+		playerMarker2.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/hoffman.jpg")));
 		playerMarker2.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLUE, null, null, null));
 		playerMarker2.setBounds(800, 1375+90, 48, 60);
 		
@@ -71,7 +71,7 @@ public class PlayerList {
 		human = (new Random()).nextInt(3);// random number 0-2
 		
 		//the human player goes first
-		setCurrent(human);
+		current = human;
 	}
 	
 	/**

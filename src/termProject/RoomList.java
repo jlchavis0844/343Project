@@ -1,7 +1,5 @@
 package termProject;
 
-import java.util.ArrayList;
-
 public class RoomList {
 	
 	Room[] rList;
@@ -137,6 +135,21 @@ public class RoomList {
 		
 		return nNames;
 	}//end getNames
-
 	
-}
+	public String[] getNeighborNames(Room r){
+		
+		int nList[] = r.getNeighbors();//load neighbors into this array
+		String nNames[] = new String[nList.length];
+		
+		//find matches between name and numbers
+		for(int i = 0; i < nList.length; i++){
+			for(int j = 0; j < rList.length; j++){
+				if (rList[j].getRoomNum() == nList[i]){
+					nNames[i] = rList[j].getRoomName();
+				}//end if statement
+			}//end inner for loop
+		}//end out for loop
+		
+		return nNames;
+	}
+}//end class

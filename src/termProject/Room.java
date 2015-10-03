@@ -1,7 +1,6 @@
 package termProject;
 
 import java.awt.Point;
-import java.util.ArrayList;
 
 /**
  * Room that players can move to 
@@ -22,7 +21,7 @@ public class Room {
 
 	/**
 	 * constructor with location, name, and number for the room
-	 * @param x, y - location on GameBoard
+	 * @param x, y - location on GameView
 	 * @param rName - name of the room
 	 * @param rNum - number of the room
 	 */
@@ -104,5 +103,39 @@ public class Room {
 	public void setLocation(Point p){
 		x = (int)p.getX();
 		y = (int)p.getY();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((roomName == null) ? 0 : roomName.hashCode());
+		result = prime * result + roomNum;
+		return result;
+	}
+
+	/**
+	 * Eclipse generated equals method for comparing rooms
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Room other = (Room) obj;
+		if (roomName == null) {
+			if (other.roomName != null)
+				return false;
+		} else if (!roomName.equals(other.roomName))
+			return false;
+		if (roomNum != other.roomNum)
+			return false;
+		return true;
 	}
 }//end class
