@@ -2,7 +2,6 @@ package termProject;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import java.awt.Font;
 import java.util.Random;
 import java.awt.Color;
 import javax.swing.border.*;
@@ -55,14 +54,14 @@ public class PlayerList {
 		playerMarker0.setBounds(800, 1375, 55, 60);
 		
 		playerMarker1 = new JLabel("player2");
-		playerMarker1.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		playerMarker1.setForeground(Color.RED);
-		playerMarker1.setBounds(800, 1375+60, 300, 30);
+		playerMarker1.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/player2.jpg")));
+		playerMarker1.setBorder(new BevelBorder(BevelBorder.RAISED, Color.GREEN, null, null, null));;
+		playerMarker1.setBounds(800, 1375+60, 53, 60);
 		
 		playerMarker2 = new JLabel("player3");
 		playerMarker2.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/hoffman.jpg")));
 		playerMarker2.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLUE, null, null, null));
-		playerMarker2.setBounds(800, 1375+90, 48, 60);
+		playerMarker2.setBounds(800, 1375+120, 48, 60);
 		
 		//load player markers into an array
 		pMarkers = new JLabel[]{playerMarker0, playerMarker1, playerMarker2};
@@ -100,7 +99,6 @@ public class PlayerList {
  * @param r Room to be moved to
  * @return the Room that the player was moved to
  */
-	@SuppressWarnings("unchecked")
 	public void movePlayer(Player p, Room r){
 		
 		if( p.getPName()== "James"){//update location of the appropriate players label
@@ -116,18 +114,18 @@ public class PlayerList {
 	
 	/**
 	 * get array index of the player used as the user player
-	 * @return human - index of the human player in players[]
+	 * @return human - Player of the human character
 	 */
-	public int getHuman() {
-		return human;
+	public Player getHuman() {
+		return players[human];
 	}
 	
 	/**
 	 * get array index of the current player in play
-	 * @return current - index of the current player in players[]
+	 * @return current - Player that is the current Player
 	 */
-	public int getCurrent() {
-		return current;
+	public Player getCurrent() {
+		return players[current];
 	}
 
 	/**
@@ -142,10 +140,14 @@ public class PlayerList {
 	 * increment current, set to 0 if out of bounds of players[]
 	 */
 	public void setNextPlayer(){
-		setCurrent(current+1);
+		
+		/*setCurrent(current+1);
 		if(current > players.length-1){//check if current is out of bounds of players[]
 			setCurrent(0);
-		}
+		}*/
+		
+		//refactoring for l33t hackorz
+		if(++current >= players.length) current = 0;//check if player index out of bounds, set to first if so
 	}
 	
 }//end class

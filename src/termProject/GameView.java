@@ -10,26 +10,12 @@ import javax.swing.JList;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
 import javax.swing.JTextArea;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Random;
-import javax.swing.ScrollPaneConstants;
-
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import com.jgoodies.forms.layout.RowSpec;
 
 /**
  * JPanel constructor used to draw game board and run most game functions
@@ -37,12 +23,11 @@ import com.jgoodies.forms.layout.RowSpec;
  *
  */
 public class GameView extends JFrame {
+	private static final long serialVersionUID = 1L;//Suppresses warnings
 	private JScrollPane scrollPane;//the scroll pane for the background
 	private JPanel contentPane; //the panel for all the goodies
-	//int human; //tracks the array index of the player being used as the user player
-	//Room roomArr[]; //holds all the rooms
-	//Player players[];//holds the 3 players
 	private JButton moveBtn;//the button to move players
+	@SuppressWarnings("rawtypes")
 	private JList moveBox; //list of possible moves for the player
 	private JLabel boardBack;//label that holds the background image
 	private JButton drawBtn; //button that draws another card from the deck
@@ -50,8 +35,14 @@ public class GameView extends JFrame {
 	private JTextArea infoBox;//test box that holds current info about the game
 	private JLabel cardLabel;//the label that holds picture of the current card
 	//PlayerList pList;//object to build a list of players and player markers
-	private GameModel model;
-	private JScrollPane scrPane;
+	@SuppressWarnings("unused")
+	private GameModel model;//contains all the player and room info
+	private JScrollPane scrPane;//holds the info box/button objects
+	JLabel markers[];//holds all the player markers
+	JLabel playerMarker0; //label for player #1
+	JLabel playerMarker1; //label for player #1
+	JLabel playerMarker2; //label for player #1
+	JTextArea consoleBox; //holds scrolling info about moves made ect.
 
 //TODO: move all object decelerations outside constructor
 //TODO: consider adding rooms as an enumerated class
@@ -62,7 +53,9 @@ public class GameView extends JFrame {
 	@SuppressWarnings("unchecked")
 	public GameView(GameModel model) {
 		
+		//set model
 		this.model = model;
+		
 		//construct JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(10, 10, 1900, 1060);
@@ -77,28 +70,43 @@ public class GameView extends JFrame {
 		boardBack.setLabelFor(scrollPane);
 		scrollPane.setViewportView(boardBack);
 		scrollPane.setPreferredSize(new Dimension(1920, 1080));
-								
+							
+		//create a the list of possible moves
 		moveBox = new JList();
 		moveBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		moveBox.setListData(model.getrList().getNeighborNames(17));
+		
+		//creates draw new card button
 		drawBtn = new JButton("Draw New Card");
+		
+		//creates a label to display the card being played
 		cardLabel = new JLabel("New label");
 		cardLabel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		cardLabel.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/card1.png")));
+		
+		//creates the player information box
 		infoBox = new JTextArea();
 		infoBox.setLineWrap(true);
 		infoBox.setEditable(false);
 		infoBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-										
+		
+		//create the move player button
 		moveBtn = new JButton("Move Player");
-									
+		moveBtn.setEnabled(false);
+		
+		//create play card button
 		pCardBtn = new JButton("Play Card");
 
+		//create a scroll pane for the info boxes and buttons
 		scrPane = new JScrollPane(contentPane);
 		
-		JTextArea consoleBox = new JTextArea();
+		//start create the consoleBox
+		consoleBox = new JTextArea();
 		consoleBox.setEditable(false);
 		consoleBox.setLineWrap(true);
 		consoleBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		
+		//everything here is to set the layout in a scalable layout, ignore is.
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -152,15 +160,59 @@ public class GameView extends JFrame {
 					.addComponent(scrPane, GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
 		);
 		getContentPane().setLayout(groupLayout);
-		moveBox.setListData(model.getRList().getNeighborNames(17));
 		
+		//make the frame viable
 		setVisible(true);
+		
+		//load player markers
+		markers = model.getpList().getMarkers();
+		playerMarker0 = markers[0];
+		playerMarker1 = markers[1];
+		playerMarker2 = markers[2];
+		for (int i = 0; i < 3; i++){
+			boardBack.add(markers[i]);//add to board
+		}
+		
+		//prime console box
+		consoleBox.setText("starting game");
+		
 	}//end constructor
 	
+	/**
+	 * used to register several listeners attached to buttons so the controller can act
+	 * @param listener - The controller that extends listener
+	 */
 	public void registerListener(GameController listener){
 		moveBtn.addActionListener(listener);
 		pCardBtn.addActionListener(listener);
 		moveBox.addListSelectionListener(listener);
 		drawBtn.addActionListener(listener);
+	}
+	
+	/**
+	 * returns the moveBox JList so that it can be updated by controller
+	 * @return JList moveBox
+	 */
+	public JList getMoveList(){
+		return  moveBox;
+	}
+	
+	/**
+	 * returns the scrolling console box. text should be appended
+	 * @return JTextArea of the scrolling console
+	 */
+	public JTextArea getGameConsole(){
+		return consoleBox;
+	}
+	
+	/**
+	 * checks if moveList has a selection, and toggles moveBtn accordingly
+	 */
+	public void setMoveBoxStatus(){
+		if(moveBox.isSelectionEmpty()){//if no selection is made
+			moveBtn.setEnabled(false);//disable the button
+		} else {
+			moveBtn.setEnabled(true);//enable the button
+		}
 	}
 }

@@ -1,14 +1,23 @@
 package termProject;
 
+/**
+ * creates an array of rooms that will be used by the controller
+ * @author James
+ * version MVC 1.0
+ */
 public class RoomList {
 	
-	Room[] rList;
+	Room[] rList;//the array of rooms
 
+	/**
+	 * constructor that creates the array of rooms
+	 * @param SIZE the size of the array
+	 */
 	public RoomList(int SIZE){
-		rList = new Room[SIZE];
+		rList = new Room[SIZE];//make an array
 		
-		rList[0] = new Room(50, 50,"George Allen Field",0);
-		rList[0].addNeighbor(new int[]{1,3,5,4});
+		rList[0] = new Room(50, 50,"George Allen Field",0);//makes the room
+		rList[0].addNeighbor(new int[]{1,3,5,4});//loads the neighbors to the room
 		rList[1] = new Room(440, 30,"Japanese Garden",1);
 		rList[1].addNeighbor(new int[]{0,3,2});
 		rList[2] = new Room(1025, 80,"Student Parking",2);
@@ -51,42 +60,52 @@ public class RoomList {
 		rList[20].addNeighbor(new int[]{15});
 	}
 	
+	/**
+	 * Returns the array of rooms
+	 * @return rList an array of rooms
+	 */
 	public Room[] getRList(){
 		return rList;
 	}
 	
 	
 	/**
-	 * find and returns a room that matches the given room number
-	 * @param i the room number to match to
+	 * find and returns a room that matches the given room name
+	 * <p>
+	 * if no room match is found, it will return ECS 308
+	 * </p>
+	 * @param n the room number to match to
 	 * @return Room that matches the given room number
 	 */
-	public Room find(int i){	
-		int index = 0;
-		for(Room r: rList){
-			if(r.getRoomNum() == i){
-				break;//room found
+	public Room find(int n){
+		Room temp = rList[17];//set default room
+		for(Room r: rList){//go through array
+			if(r.getRoomNum() == n){//if a match is found
+				temp = r;//update the temp room
+				break;//stop checking since match is found
 			}
-			index++;//keep going
 		}
-		return rList[index];
+		return temp;//return room
 	}
 	
 	
 	/**
 	 * find and returns a room that matches the given room name
+	 * <p>
+	 * if no room match is found, it will return the info for ECS 308
+	 * </p>
 	 * @param s the room name to match to
-	 * @return Room that matches the given room number
+	 * @return Room that matches the given room name
 	 */
-	public Room find(String s){	
-		int index = 0;
-		for(Room r: rList){
-			if(r.getRoomName() == s){
-				break;//room found
+	public Room find(String s){
+		Room temp = rList[17];//sets default room
+		for(Room r: rList){//loop through entire array
+			if(r.getRoomName() == s){//if a match is found
+				temp = r;//update the temp room
+				break;//stop checking since match is found
 			}
-			index++;//keep going
 		}
-		return rList[index];
+		return temp;
 	}
 	
 	
