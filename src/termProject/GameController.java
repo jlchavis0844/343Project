@@ -3,8 +3,10 @@ package termProject;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JList;
+import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.BadLocationException;
 
 /**
  * this is the game controller class that will interact with the view and model classes
@@ -73,7 +75,9 @@ public class GameController implements ActionListener, ListSelectionListener{
 		current = model.getpList().getCurrent();//update the current player
 		model.getpList().movePlayer(current, selectedRoom);//call the movePlayer for the current player and selected room
 		view.getMoveList().setListData(model.getrList().getNeighborNames(selectedRoom));//update the move list
-		view.getGameConsole().append("\nMoving " + current.getPName() + " to " + selectedRoom.getRoomName());//info to consolse
+		JTextArea tempConsole = view.getGameConsole();
+		String message = "Moving " + current.getPName() + " to " + selectedRoom.getRoomName();
 		view.setMoveBoxStatus();//refresh moveBtn status
+		tempConsole.setText(tempConsole.getText() + message + "\n");
 	}
 }

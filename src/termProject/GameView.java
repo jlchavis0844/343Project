@@ -40,9 +40,10 @@ public class GameView extends JFrame {
 	private JScrollPane scrPane;//holds the info box/button objects
 	JLabel markers[];//holds all the player markers
 	JLabel playerMarker0; //label for player #1
-	JLabel playerMarker1; //label for player #1
-	JLabel playerMarker2; //label for player #1
+	JLabel playerMarker1; //label for player #2
+	JLabel playerMarker2; //label for player #3
 	JTextArea consoleBox; //holds scrolling info about moves made ect.
+	private JScrollPane scrollPane_1;
 
 //TODO: move all object decelerations outside constructor
 //TODO: consider adding rooms as an enumerated class
@@ -99,53 +100,6 @@ public class GameView extends JFrame {
 
 		//create a scroll pane for the info boxes and buttons
 		scrPane = new JScrollPane(contentPane);
-		
-		//start create the consoleBox
-		consoleBox = new JTextArea();
-		consoleBox.setEditable(false);
-		consoleBox.setLineWrap(true);
-		consoleBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		
-		//everything here is to set the layout in a scalable layout, ignore is.
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(10)
-					.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)
-					.addGap(10)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-						.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-						.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
-					.addGap(10)
-					.addComponent(cardLabel, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
-					.addGap(4)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(consoleBox, GroupLayout.DEFAULT_SIZE, 1212, Short.MAX_VALUE)
-						.addComponent(infoBox))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(28)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 305, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-							.addGap(5)
-							.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-							.addGap(5)
-							.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE))
-						.addComponent(cardLabel)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-							.addGap(14)
-							.addComponent(consoleBox, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))))
-		);
-		contentPane.setLayout(gl_contentPane);
-		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{moveBox, drawBtn, moveBtn, pCardBtn, cardLabel, consoleBox, infoBox}));
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -173,8 +127,56 @@ public class GameView extends JFrame {
 			boardBack.add(markers[i]);//add to board
 		}
 		
+		scrollPane_1 = new JScrollPane();
+		
+		//start create the consoleBox
+		consoleBox = new JTextArea();
+		scrollPane_1.setViewportView(consoleBox);
+		consoleBox.setEditable(false);
+		consoleBox.setLineWrap(true);
+		consoleBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{moveBox, drawBtn, moveBtn, pCardBtn, cardLabel, consoleBox, infoBox}));
+		
 		//prime console box
 		consoleBox.setText("starting game");
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(10)
+					.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
+						.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
+						.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
+					.addGap(10)
+					.addComponent(cardLabel, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
+					.addGap(4)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 1212, Short.MAX_VALUE)
+						.addComponent(infoBox, GroupLayout.DEFAULT_SIZE, 1212, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(28)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 305, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE))
+						.addComponent(cardLabel)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+							.addGap(14)
+							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))))
+		);
+		contentPane.setLayout(gl_contentPane);
 		
 	}//end constructor
 	

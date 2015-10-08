@@ -140,13 +140,6 @@ public class PlayerList {
 	 * increment current, set to 0 if out of bounds of players[]
 	 */
 	public void setNextPlayer(){
-		
-		/*setCurrent(current+1);
-		if(current > players.length-1){//check if current is out of bounds of players[]
-			setCurrent(0);
-		}*/
-		
-		//refactoring for l33t hackorz
 		if(++current >= players.length) current = 0;//check if player index out of bounds, set to first if so
 	}
 	

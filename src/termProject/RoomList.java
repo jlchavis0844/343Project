@@ -70,7 +70,7 @@ public class RoomList {
 	
 	
 	/**
-	 * find and returns a room that matches the given room name
+	 * find and returns a room that matches the given room number
 	 * <p>
 	 * if no room match is found, it will return ECS 308
 	 * </p>
