@@ -9,6 +9,7 @@ package termProject;
  * @param int integrity - integrity score
  * @param int qp - Quality Points score
  * @param int rNumLocation - room number location
+ * @param int moveCount - counter for the number of moves made during turn
  * @author Sylvia
  *v 1.0
  */
@@ -19,6 +20,7 @@ public class Player {
 	private int integrity;
 	private int qp;
 	private int rNumLocation;
+	private int moveCount;
 	
 	/**
 	 * constructor with name, learning, craft, and integrity of the player
@@ -34,6 +36,7 @@ public class Player {
 		this.integrity = integrity;
 		qp = 0;
 		rNumLocation = 17; // all players start the game at ECS308
+		moveCount = 0;
 	}
 	
 	/**
@@ -131,5 +134,38 @@ public class Player {
 	public int getRNumLocation(){
 		return rNumLocation;
 	}
+	
+	/**
+	 * set moveCount 
+	 * @param m - move count
+	 */
+	public void setMoveCount(int m){
+		moveCount = m;
+	}
+	
+	/**
+	 * get moveCount
+	 * @return moveCount - number of moves made during the player's turn
+	 */
+	public int getMoveCount(){
+		return moveCount;
+	}
+	
+	/**
+	 * reset moveCount to 0
+	 */
+	public void resetMoveCount(){
+		moveCount = 0;
+	}
+	
+	/**
+	 * moves the player to a given room number and increments moveCount
+	 * @param room - the room to be moved to
+	 */
+	public void move(int room){
+		rNumLocation = room;
+		moveCount++;
+	}
+	
 	
 }

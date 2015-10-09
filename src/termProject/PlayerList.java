@@ -101,15 +101,17 @@ public class PlayerList {
  */
 	public void movePlayer(Player p, Room r){
 		
-		if( p.getPName()== "James"){//update location of the appropriate players label
-			playerMarker0.setLocation(r.getX(),r.getY());
-		} else if(p.getPName() == "Sylvia"){
-			playerMarker1.setLocation(r.getX(),r.getY()+60);
-		} else {
-			playerMarker2.setLocation(r.getX(),r.getY()+120);
+		if(p.getMoveCount() < 3){
+			if( p.getPName()== "James"){//update location of the appropriate players label
+				playerMarker0.setLocation(r.getX(),r.getY());
+			} else if(p.getPName() == "Sylvia"){
+				playerMarker1.setLocation(r.getX(),r.getY()+60);
+			} else {
+				playerMarker2.setLocation(r.getX(),r.getY()+120);
+			}
+			p.move(r.getRoomNum());//updates player room location
+			
 		}
-		
-		p.setRNumLocation(r.getRoomNum());//updates player room location
 	}
 	
 	/**

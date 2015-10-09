@@ -38,10 +38,14 @@ public class GameController implements ActionListener, ListSelectionListener{
 		if(e.getActionCommand() == "Move Player"){//if move player button is triggered
 			System.out.println(e.getActionCommand());
 			moveCurrentPlayer();
-			
+			if(model.getpList().getCurrent().getMoveCount() == 3){
+				view.disableMoveBox();
+			}	
 		} else if(e.getActionCommand() == "Play Card"){//if play card button is triggered
 			System.out.println(e.getActionCommand());
 			//call PlayCard() method
+			refreshPlayer();
+			
 		} else if(e.getActionCommand() == "Draw New Card"){//if draw new card button is triggered
 			System.out.println(e.getActionCommand());
 		} else {
@@ -51,7 +55,7 @@ public class GameController implements ActionListener, ListSelectionListener{
 
 	/**
 	 * Selection listener for the Selection List Box
-	 * since this is tied to only one component, lets not make a seperate method
+	 * since this is tied to only one component, lets not make a separate method
 	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
@@ -79,5 +83,19 @@ public class GameController implements ActionListener, ListSelectionListener{
 		String message = "Moving " + current.getPName() + " to " + selectedRoom.getRoomName();
 		view.setMoveBoxStatus();//refresh moveBtn status
 		tempConsole.setText(tempConsole.getText() + message + "\n");
+	}
+	
+	/**
+	 * Resets the player's moveCount after turn.
+	 * Sets the next player in pList as current and refreshes moveBox 
+	 */
+	@SuppressWarnings("unchecked")
+	private void refreshPlayer(){
+		model.getpList().getCurrent().resetMoveCount();//reset moveCount for player
+		model.getpList().setNextPlayer();//get the next player
+		current = model.getpList().getCurrent();//update the current player
+		view.getMoveList().setListData(model.getrList().getNeighborNames(current.getRNumLocation()));//update the move list
+		view.enableMoveBox();
+		
 	}
 }

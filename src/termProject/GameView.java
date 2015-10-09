@@ -217,4 +217,20 @@ public class GameView extends JFrame {
 			moveBtn.setEnabled(true);//enable the button
 		}
 	}
+	
+	/**
+	 * disable moveBox selection
+	 */
+	public void disableMoveBox(){
+		moveBox.setEnabled(false); 
+	}
+	
+	/**
+	 * enable moveBox selection
+	 */
+	public void enableMoveBox(){
+		moveBox.setEnabled(true); 
+	}
+	
+	
 }
