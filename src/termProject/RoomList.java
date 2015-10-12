@@ -68,6 +68,15 @@ public class RoomList {
 		return rList;
 	}
 	
+	/**
+	 * Returns a room of a given index
+	 * @param rIndex - index of rList
+	 * @return Room at the index
+	 */
+	public Room getRoom(int rIndex){
+		return rList[rIndex];
+	}
+	
 	
 	/**
 	 * find and returns a room that matches the given room number

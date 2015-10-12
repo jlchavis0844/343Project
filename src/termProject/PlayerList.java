@@ -34,19 +34,38 @@ public class PlayerList {
 	private JLabel playerMarker1;
 	private JLabel playerMarker2;
 	private int human; 
-	private int current; 
+	private int current;
 	
 	/**
 	 * Default constructor for the PlayerList class
 	 */
 	public PlayerList(){
+		//decide which player is the human
+		human = (new Random()).nextInt(3);// random number 0-2
+		
 		players = new Player[3];//make an array 3 spaces long
 		
 		//make 3 players and store in array
-		players[0] = new Player("James", 10,10,10);
-		players[1] = new Player("Sylvia", 10,10,10);
-		players[2] = new Player("Dr. Hoffman", 10,10,10);
 		
+		switch(human){
+		case 0:
+			players[0] = new Human("James", 10,10,10);
+			players[1] = new Player("Sylvia", 10,10,10);
+			players[2] = new Player("Dr. Hoffman", 10,10,10);
+			break;
+			
+		case 1:
+			players[0] = new Player("James", 10,10,10);
+			players[1] = new Human("Sylvia", 10,10,10);
+			players[2] = new Player("Dr. Hoffman", 10,10,10);
+			break;
+			
+		case 2:
+			players[0] = new Player("James", 10,10,10);
+			players[1] = new Player("Sylvia", 10,10,10);
+			players[2] = new Human("Dr. Hoffman", 10,10,10);
+			break;
+		}
 		//Make 3 playerMarkers
 		playerMarker0 = new JLabel("player1");
 		playerMarker0.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/player1.jpg")));
@@ -66,8 +85,7 @@ public class PlayerList {
 		//load player markers into an array
 		pMarkers = new JLabel[]{playerMarker0, playerMarker1, playerMarker2};
 		
-		//decide which player is the human
-		human = (new Random()).nextInt(3);// random number 0-2
+		
 		
 		//the human player goes first
 		current = human;
@@ -123,7 +141,7 @@ public class PlayerList {
 	}
 	
 	/**
-	 * get array index of the current player in play
+	 * get the current player in play
 	 * @return current - Player that is the current Player
 	 */
 	public Player getCurrent() {
@@ -139,10 +157,15 @@ public class PlayerList {
 	}
 	
 	/**
+	 * reset moveCount for the current player;
 	 * increment current, set to 0 if out of bounds of players[]
 	 */
 	public void setNextPlayer(){
+		players[current].resetMoveCount();
 		if(++current >= players.length) current = 0;//check if player index out of bounds, set to first if so
 	}
+	
+	
+	
 	
 }//end class

@@ -29,8 +29,8 @@ public class Player {
 	 * @param craft - starting craft score
 	 * @param integrity - starting integrity score
 	 */
-	public Player(String pName, int learning, int craft, int integrity){
-		playerName = pName;
+	public Player(String playerName, int learning, int craft, int integrity){
+		this.playerName = playerName;
 		this.learning = learning;
 		this.craft = craft;
 		this.integrity = integrity;
@@ -41,42 +41,42 @@ public class Player {
 	
 	/**
 	 * set name of the player
-	 * @param pName - player name
+	 * @param playerName
 	 */
-	public void setPName(String pName){
-		playerName = pName;
+	public void setPName(String playerName){
+		this.playerName = playerName;
 	}
 	
 	/**
-	 * set learning score
-	 * @param learning - learning score
+	 * change the player's learning score
+	 * @param learning - a positive or negative learning will be added to learning
 	 */
-	public void setLearning(int learning){
-		this.learning = learning;
+	public void changeLearning(int learning){
+		this.learning += learning;
 	}
 	
 	/**
-	 * set craft score
-	 * @param craft - craft score
+	 * change the player's craft score
+	 * @param craft - a positive or negative craft will be added to craft
 	 */
-	public void setCraft(int craft){
-		this.craft = craft;
+	public void changeCraft(int craft){
+		this.craft += craft;
 	}
 	
 	/**
-	 * set integrity score
-	 * @param integrity - integrity score
+	 * change the player's integrity score
+	 * @param integrity - a positive or negative value will be added to integrity
 	 */
-	public void setIntegrity(int integrity){
-		this.integrity = integrity;
+	public void changeIntegrity(int integrity){
+		this.integrity += integrity;
 	}
 	
 	/**
-	 * set qp score
-	 * @param qp - qp score
+	 * change the player's qp score
+	 * @param qp - a positive or negative value will be added to qp
 	 */
-	public void setQP(int qp){
-		this.qp = qp;
+	public void changeQP(int qp){
+		this.qp += qp;
 	}
 	
 	/**
@@ -136,14 +136,6 @@ public class Player {
 	}
 	
 	/**
-	 * set moveCount 
-	 * @param m - move count
-	 */
-	public void setMoveCount(int m){
-		moveCount = m;
-	}
-	
-	/**
 	 * get moveCount
 	 * @return moveCount - number of moves made during the player's turn
 	 */
@@ -154,7 +146,7 @@ public class Player {
 	/**
 	 * reset moveCount to 0
 	 */
-	public void resetMoveCount(){
+	public void resetMoveCount(){ 
 		moveCount = 0;
 	}
 	
@@ -165,7 +157,14 @@ public class Player {
 	public void move(int room){
 		rNumLocation = room;
 		moveCount++;
+		/* 
+		if(moveCount == 3){ // reset moveCount at setNextPlayer() in pList
+			moveCount = 0;
+		}
+		*/
 	}
+	
+	
 	
 	
 }

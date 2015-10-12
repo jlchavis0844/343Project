@@ -81,6 +81,15 @@ public class Room {
 	}
 	
 	/**
+	 * get neighbor room number of a given index
+	 * @param nIndex - index of neighbors[]
+	 * @return room number of the neighbor 
+	 */
+	public int getNeighbor(int nIndex){
+		return neighbors[nIndex];
+	}
+	
+	/**
 	 * get x location
 	 * @return x - x coordinate
 	 */

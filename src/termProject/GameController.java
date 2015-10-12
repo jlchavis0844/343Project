@@ -2,6 +2,8 @@ package termProject;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
+
 import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
@@ -79,10 +81,11 @@ public class GameController implements ActionListener, ListSelectionListener{
 		current = model.getpList().getCurrent();//update the current player
 		model.getpList().movePlayer(current, selectedRoom);//call the movePlayer for the current player and selected room
 		view.getMoveList().setListData(model.getrList().getNeighborNames(selectedRoom));//update the move list
-		JTextArea tempConsole = view.getGameConsole();
+		//JTextArea tempConsole = view.getGameConsole();
 		String message = "Moving " + current.getPName() + " to " + selectedRoom.getRoomName();
+		view.toConsole(message);
 		view.setMoveBoxStatus();//refresh moveBtn status
-		tempConsole.setText(tempConsole.getText() + message + "\n");
+		//tempConsole.setText(tempConsole.getText() + message + "\n");
 	}
 	
 	/**
@@ -91,11 +94,27 @@ public class GameController implements ActionListener, ListSelectionListener{
 	 */
 	@SuppressWarnings("unchecked")
 	private void refreshPlayer(){
-		model.getpList().getCurrent().resetMoveCount();//reset moveCount for player
+		view.toConsole(model.getpList().getCurrent().getPName() + " plays his card.");
+		//model.getpList().getCurrent().resetMoveCount();//reset moveCount for player
 		model.getpList().setNextPlayer();//get the next player
-		current = model.getpList().getCurrent();//update the current player
-		view.getMoveList().setListData(model.getrList().getNeighborNames(current.getRNumLocation()));//update the move list
-		view.enableMoveBox();
-		
+		//current = model.getpList().getCurrent();//update the current player
+		//view.getMoveList().setListData(model.getrList().getNeighborNames(current.getRNumLocation()));//update the move list
+		view.enableMoveBox();//turn the move button on
+		startAITurns();//start the AI run of turns
+	}
+	
+	
+	/**
+	 * takes the 2 AI players through a their random turns
+	 */
+	public void startAITurns(){
+		for(int i = 0; i < 2; i++){//start 2 loops (1 per AI player)
+			current = model.getpList().getCurrent();//ai is the current player
+			Vector<String> printVector = model.aiPlay();//ai gameplay
+			for(String s: printVector){//prints player info to the screen
+				view.toConsole(s);
+			}
+			//model.getpList().setNextPlayer(); - added to the aiPlay() method
+		}
 	}
 }

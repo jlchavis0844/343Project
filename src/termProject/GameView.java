@@ -24,7 +24,7 @@ import java.awt.Component;
  */
 public class GameView extends JFrame {
 	private static final long serialVersionUID = 1L;//Suppresses warnings
-	private JScrollPane scrollPane;//the scroll pane for the background
+	private JScrollPane backgroundScrollPane;//the scroll pane for the background
 	private JPanel contentPane; //the panel for all the goodies
 	private JButton moveBtn;//the button to move players
 	@SuppressWarnings("rawtypes")
@@ -37,13 +37,13 @@ public class GameView extends JFrame {
 	//PlayerList pList;//object to build a list of players and player markers
 	@SuppressWarnings("unused")
 	private GameModel model;//contains all the player and room info
-	private JScrollPane scrPane;//holds the info box/button objects
+	private JScrollPane infoScrollPane;//holds the info box/button objects
 	JLabel markers[];//holds all the player markers
 	JLabel playerMarker0; //label for player #1
 	JLabel playerMarker1; //label for player #2
 	JLabel playerMarker2; //label for player #3
 	JTextArea consoleBox; //holds scrolling info about moves made ect.
-	private JScrollPane scrollPane_1;
+	private JScrollPane consoleScrollPane;
 
 //TODO: move all object decelerations outside constructor
 //TODO: consider adding rooms as an enumerated class
@@ -67,10 +67,11 @@ public class GameView extends JFrame {
 		//build scroll panel for the console
 		boardBack = new JLabel("Game Background");
 		boardBack.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/CSULBMap3.png")));
-		scrollPane = new JScrollPane();
-		boardBack.setLabelFor(scrollPane);
-		scrollPane.setViewportView(boardBack);
-		scrollPane.setPreferredSize(new Dimension(1920, 1080));
+		boardBack.setPreferredSize(new Dimension(boardBack.getIcon().getIconWidth(),boardBack.getIcon().getIconHeight()));
+		backgroundScrollPane = new JScrollPane();
+		boardBack.setLabelFor(backgroundScrollPane);
+		backgroundScrollPane.setViewportView(boardBack);
+		backgroundScrollPane.setPreferredSize(new Dimension(1920, 1080));
 							
 		//create a the list of possible moves
 		moveBox = new JList();
@@ -99,19 +100,19 @@ public class GameView extends JFrame {
 		pCardBtn = new JButton("Play Card");
 
 		//create a scroll pane for the info boxes and buttons
-		scrPane = new JScrollPane(contentPane);
+		infoScrollPane = new JScrollPane(contentPane);
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1884, Short.MAX_VALUE)
-				.addComponent(scrPane, GroupLayout.DEFAULT_SIZE, 1884, Short.MAX_VALUE)
+				.addComponent(backgroundScrollPane, GroupLayout.DEFAULT_SIZE, 1884, Short.MAX_VALUE)
+				.addComponent(infoScrollPane, GroupLayout.DEFAULT_SIZE, 1884, Short.MAX_VALUE)
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
+					.addComponent(backgroundScrollPane, GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(scrPane, GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
+					.addComponent(infoScrollPane, GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
 		);
 		getContentPane().setLayout(groupLayout);
 		
@@ -126,19 +127,19 @@ public class GameView extends JFrame {
 		for (int i = 0; i < 3; i++){
 			boardBack.add(markers[i]);//add to board
 		}
-		
-		scrollPane_1 = new JScrollPane();
+		//for the console box
+		consoleScrollPane = new JScrollPane();
 		
 		//start create the consoleBox
 		consoleBox = new JTextArea();
-		scrollPane_1.setViewportView(consoleBox);
+		consoleScrollPane.setViewportView(consoleBox);
 		consoleBox.setEditable(false);
 		consoleBox.setLineWrap(true);
 		consoleBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{moveBox, drawBtn, moveBtn, pCardBtn, cardLabel, consoleBox, infoBox}));
 		
 		//prime console box
-		consoleBox.setText("starting game");
+		consoleBox.setText("starting game\n");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -154,7 +155,7 @@ public class GameView extends JFrame {
 					.addComponent(cardLabel, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
 					.addGap(4)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 1212, Short.MAX_VALUE)
+						.addComponent(consoleScrollPane, GroupLayout.DEFAULT_SIZE, 1212, Short.MAX_VALUE)
 						.addComponent(infoBox, GroupLayout.DEFAULT_SIZE, 1212, Short.MAX_VALUE))
 					.addContainerGap())
 		);
@@ -174,7 +175,7 @@ public class GameView extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
 							.addGap(14)
-							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(consoleScrollPane, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))))
 		);
 		contentPane.setLayout(gl_contentPane);
 		
@@ -217,7 +218,8 @@ public class GameView extends JFrame {
 			moveBtn.setEnabled(true);//enable the button
 		}
 	}
-	
+
+
 	/**
 	 * disable moveBox selection
 	 */
@@ -232,5 +234,14 @@ public class GameView extends JFrame {
 		moveBox.setEnabled(true); 
 	}
 	
-	
-}
+	/**
+	 * prints the given string to the console
+	 * <p>
+	 * Do not use \n, a line break is added after every message
+	 * </p>
+	 * @param s the string to be added
+	 */
+	public void toConsole(String s){
+		consoleBox.setText(consoleBox.getText() + s + "\n");
+	}
+}//end class
