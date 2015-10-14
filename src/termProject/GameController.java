@@ -5,10 +5,8 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.JList;
-import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.BadLocationException;
 
 /**
  * this is the game controller class that will interact with the view and model classes
@@ -18,7 +16,6 @@ import javax.swing.text.BadLocationException;
 public class GameController implements ActionListener, ListSelectionListener{
 	private GameModel model; //the model class which holds rooms and players
 	private GameView view;// the view class which is the game board
-	private Player current; // tracks the current player
 	private Room selectedRoom; // when a room selection is made, this room is updated to the selected room
 	
 	/**
@@ -78,27 +75,20 @@ public class GameController implements ActionListener, ListSelectionListener{
 	 */
 	@SuppressWarnings("unchecked")
 	private void moveCurrentPlayer(){
-		current = model.getpList().getCurrent();//update the current player
-		model.getpList().movePlayer(current, selectedRoom);//call the movePlayer for the current player and selected room
+		model.getpList().movePlayer(model.getpList().getHuman(), selectedRoom);//call the movePlayer for the current player and selected room
 		view.getMoveList().setListData(model.getrList().getNeighborNames(selectedRoom));//update the move list
-		//JTextArea tempConsole = view.getGameConsole();
-		String message = "Moving " + current.getPName() + " to " + selectedRoom.getRoomName();
+		String message = "Moving " + model.getpList().getHuman().getPName() + " to " + selectedRoom.getRoomName();
 		view.toConsole(message);
-		view.setMoveBoxStatus();//refresh moveBtn status
-		//tempConsole.setText(tempConsole.getText() + message + "\n");
+		view.setMoveBoxStatus();//refresh moveBtn status	
 	}
 	
 	/**
 	 * Resets the player's moveCount after turn.
 	 * Sets the next player in pList as current and refreshes moveBox 
 	 */
-	@SuppressWarnings("unchecked")
 	private void refreshPlayer(){
 		view.toConsole(model.getpList().getCurrent().getPName() + " plays his card.");
-		//model.getpList().getCurrent().resetMoveCount();//reset moveCount for player
 		model.getpList().setNextPlayer();//get the next player
-		//current = model.getpList().getCurrent();//update the current player
-		//view.getMoveList().setListData(model.getrList().getNeighborNames(current.getRNumLocation()));//update the move list
 		view.enableMoveBox();//turn the move button on
 		startAITurns();//start the AI run of turns
 	}
@@ -109,12 +99,12 @@ public class GameController implements ActionListener, ListSelectionListener{
 	 */
 	public void startAITurns(){
 		for(int i = 0; i < 2; i++){//start 2 loops (1 per AI player)
-			current = model.getpList().getCurrent();//ai is the current player
 			Vector<String> printVector = model.aiPlay();//ai gameplay
 			for(String s: printVector){//prints player info to the screen
 				view.toConsole(s);
 			}
-			//model.getpList().setNextPlayer(); - added to the aiPlay() method
 		}
+		model.updateInfo(view.getInfoBox());
 	}
+	
 }

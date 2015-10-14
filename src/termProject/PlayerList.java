@@ -49,21 +49,21 @@ public class PlayerList {
 		
 		switch(human){
 		case 0:
-			players[0] = new Human("James", 10,10,10);
-			players[1] = new Player("Sylvia", 10,10,10);
-			players[2] = new Player("Dr. Hoffman", 10,10,10);
+			players[0] = new Human("James", 2,2,2);
+			players[1] = new Player("Sylvia", 3,1,2);
+			players[2] = new Player("Dr. Hoffman", 0,3,3);
 			break;
 			
 		case 1:
-			players[0] = new Player("James", 10,10,10);
-			players[1] = new Human("Sylvia", 10,10,10);
-			players[2] = new Player("Dr. Hoffman", 10,10,10);
+			players[0] = new Player("James", 2,2,2);
+			players[1] = new Human("Sylvia", 3,1,2);
+			players[2] = new Player("Dr. Hoffman", 0,3,3);
 			break;
 			
 		case 2:
-			players[0] = new Player("James", 10,10,10);
-			players[1] = new Player("Sylvia", 10,10,10);
-			players[2] = new Human("Dr. Hoffman", 10,10,10);
+			players[0] = new Player("James", 2,2,2);
+			players[1] = new Player("Sylvia", 3,1,2);
+			players[2] = new Human("Dr. Hoffman", 0,3,3);
 			break;
 		}
 		//Make 3 playerMarkers
@@ -158,7 +158,7 @@ public class PlayerList {
 	
 	/**
 	 * reset moveCount for the current player;
-	 * increment current, set to 0 if out of bounds of players[]
+	 * increment current,    set to 0 if out of bounds of players[]
 	 */
 	public void setNextPlayer(){
 		players[current].resetMoveCount();

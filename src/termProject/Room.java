@@ -4,13 +4,8 @@ import java.awt.Point;
 
 /**
  * Room that players can move to 
- * @param ArrayList<Integers> neighbors - array to hold list of neighbors
- * @param int roomNum - identifies specific rooms using a number
- * @param String roomName - Abstracted room identifier
- * @param int x starting room x location
- * @param int y starting room y location
  * @author James
- *v 1.0
+ * v 1.0
  */
 public class Room {
 	private int[] neighbors;

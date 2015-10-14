@@ -3,13 +3,6 @@ package termProject;
 
 /**
  * Player in the game and its attributes
- * @param String playerName - identifies the player by name
- * @param learning - learning score
- * @param int craft - craft score
- * @param int integrity - integrity score
- * @param int qp - Quality Points score
- * @param int rNumLocation - room number location
- * @param int moveCount - counter for the number of moves made during turn
  * @author Sylvia
  *v 1.0
  */
@@ -81,7 +74,7 @@ public class Player {
 	
 	/**
 	 * get player name
-	 * @return playerName - player name
+	 * @return playerName 
 	 */
 	public String getPName(){
 		return playerName;
@@ -97,7 +90,7 @@ public class Player {
 	
 	/**
 	 * get craft score
-	 * @return craft - craft score
+	 * @return craft 
 	 */
 	public int getCraft(){
 		return craft;
@@ -105,7 +98,7 @@ public class Player {
 	
 	/**
 	 * get integrity score
-	 * @return integrity - integrity score
+	 * @return integrity 
 	 */
 	public int getIntegrity(){
 		return integrity;
@@ -113,7 +106,7 @@ public class Player {
 	
 	/**
 	 * get qp score
-	 * @return qp - qp score
+	 * @return qp 
 	 */
 	public int getQP(){
 		return qp;
@@ -157,11 +150,6 @@ public class Player {
 	public void move(int room){
 		rNumLocation = room;
 		moveCount++;
-		/* 
-		if(moveCount == 3){ // reset moveCount at setNextPlayer() in pList
-			moveCount = 0;
-		}
-		*/
 	}
 	
 	

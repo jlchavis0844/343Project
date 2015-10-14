@@ -1,6 +1,5 @@
 package termProject;
 
-import java.util.Random;
 
 /**
  * Child class of Player

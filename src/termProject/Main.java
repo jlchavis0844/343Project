@@ -14,6 +14,9 @@ public class Main {
 		//register controller as listeners
 		view.registerListener(controller);
 		
+		//writes player info to the view infoBox
+		model.updateInfo(view.getInfoBox());
+		
 	}//end main function
 
 }//end main class

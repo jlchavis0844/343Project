@@ -3,10 +3,13 @@ package termProject;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.swing.JTextArea;
+
 /**
  * Class that builds the model
- *<p>
+ * <p>
  * consists of mostly the playerList and the RoomList.
+ * </p>
  * @author James
  *
  */
@@ -50,21 +53,27 @@ public class GameModel {
 		this.rList = rList;
 	}
 	
-	public void playTurn(){
-		//pList.getCurrent().startTurn();
-	}
-	
+	/**
+	 * AI player will either move to a random neighboring room or play card.
+	 * The player can move up to 3 times and must end turn by playing card.
+	 * @return String describing AI movement
+	 */
 	public Vector<String> aiPlay(){
 		Vector<String> consoleMsg = new Vector<String>();
 		String tempStr;
+		int choice;
+		int currentRNum;
+		int numNeighbors;
+		int neighborIndexChoice;
+		int rNumChoice;
 		whileLoop://labels the while loop as 'whileLoop'
 		while(pList.getCurrent().getMoveCount() < 3){
-			int choice = random(2);//random number 0-1
+			choice = random(2);//random number 0-1
 			if(choice == 0){
-				int currentRNum = pList.getCurrent().getRNumLocation();//current room number
-				int numNeighbors = rList.getNeighborNames(currentRNum).length;//number of neighbors
-				int neighborIndexChoice = random(numNeighbors);//random index of neighbors[]
-				int rNumChoice = rList.getRoom(currentRNum).getNeighbor(neighborIndexChoice);//chosen room number
+				currentRNum = pList.getCurrent().getRNumLocation();//current room number
+				numNeighbors = rList.getNeighborNames(currentRNum).length;//number of neighbors
+				neighborIndexChoice = random(numNeighbors);//random index of neighbors[]
+				rNumChoice = rList.getRoom(currentRNum).getNeighbor(neighborIndexChoice);//chosen room number
 				pList.movePlayer(pList.getCurrent(), rList.getRoom(rNumChoice));//moves the player
 				tempStr = "moving AI player "+pList.getCurrent().getPName() + " to " + rList.getRoom(rNumChoice).getRoomName();//store output message
 				System.out.println(tempStr);//print to console
@@ -76,12 +85,14 @@ public class GameModel {
 				consoleMsg.add(tempStr);//stores console message
 				//call playCard() method
 				break whileLoop; // exit while loop after game card is played
-				
-				
 			}
-		}
+		}//end of whileLoop
+		
 	//TODO: Delete this once AI has been sorted after iteration #1
 		if(pList.getCurrent().getMoveCount() == 3){//playCard() when out of moves
+			tempStr = "AI player "+pList.getCurrent().getPName() + " plays their card";
+			System.out.println(tempStr);//print to console for tracking
+			consoleMsg.add(tempStr);//stores console message
 			//call playCard() method
 		}
 		pList.setNextPlayer();//advance to next player
@@ -98,4 +109,41 @@ public class GameModel {
 		return (new Random()).nextInt(length);
 	}
 	
+	/**
+	 * refreshes the infoBox
+	 * <p>
+	 * calling this method updates all the player info for the infoBox in the GameView.
+	 * This is called once in the main at the start of the program and after every AI turn
+	 * </p>
+	 * @param infoBox The JTextArea that holds the information of the players in the view
+	 */
+	public void updateInfo(JTextArea infoBox){
+		Player tempArr[] = pList.getPlayerList();// holds all the players
+		String tempStr; // holds the message to be out put
+		
+		infoBox.setText("\t\tLearning\tCraft\tIntegrity\tQuality Points\n");//header row
+		for(Player p: tempArr){//Dr. Hoffman is too long for a double tab
+			if (p.getPName() == "Dr. Hoffman"){//check if dr hoffman
+			tempStr = p.getPName() + "\t";
+			} else {
+				tempStr = p.getPName() + "\t\t";
+			}
+			tempStr += p.getLearning() + "\t\t";//adds the various chips to the output message
+			tempStr += p.getCraft() + "\t";
+			tempStr += p.getIntegrity()+ "\t\t";
+			tempStr += p.getQP() + "\n";
+			infoBox.append(tempStr);//add message
+			System.out.println(tempStr);//send to console
+		}
+		//additional info not really needed now
+		infoBox.append("\nCards in Deck :" + "\t Discards out of play: \n");
+		Player tPlay = pList.getHuman();
+		rList.getRoom(tPlay.getRNumLocation()).getRoomName();
+		tempStr = "You are " + tPlay.getPName();
+		tempStr += " and you are in " + rList.getRoom(tPlay.getRNumLocation()).getRoomName();
+		infoBox.append(tempStr);
+		System.out.println(tempStr);
+		
+		
+	}
 }

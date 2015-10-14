@@ -16,6 +16,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
+import java.awt.Font;
 
 /**
  * JPanel constructor used to draw game board and run most game functions
@@ -34,20 +35,19 @@ public class GameView extends JFrame {
 	private JButton pCardBtn;//the button that plays a card.
 	private JTextArea infoBox;//test box that holds current info about the game
 	private JLabel cardLabel;//the label that holds picture of the current card
-	//PlayerList pList;//object to build a list of players and player markers
 	@SuppressWarnings("unused")
 	private GameModel model;//contains all the player and room info
 	private JScrollPane infoScrollPane;//holds the info box/button objects
-	JLabel markers[];//holds all the player markers
-	JLabel playerMarker0; //label for player #1
-	JLabel playerMarker1; //label for player #2
-	JLabel playerMarker2; //label for player #3
-	JTextArea consoleBox; //holds scrolling info about moves made ect.
+	private JLabel markers[];//holds all the player markers
+	@SuppressWarnings("unused")
+	private JLabel playerMarker0; //label for player #1
+	@SuppressWarnings("unused")
+	private JLabel playerMarker1; //label for player #2
+	@SuppressWarnings("unused")
+	private JLabel playerMarker2; //label for player #3
+	private JTextArea consoleBox; //holds scrolling info about moves made ect.
 	private JScrollPane consoleScrollPane;
 
-//TODO: move all object decelerations outside constructor
-//TODO: consider adding rooms as an enumerated class
-	
 	/**
 	 * Create the frame.
 	 */
@@ -88,6 +88,7 @@ public class GameView extends JFrame {
 		
 		//creates the player information box
 		infoBox = new JTextArea();
+		infoBox.setFont(new Font("Monospaced", Font.PLAIN, 16));
 		infoBox.setLineWrap(true);
 		infoBox.setEditable(false);
 		infoBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -243,5 +244,13 @@ public class GameView extends JFrame {
 	 */
 	public void toConsole(String s){
 		consoleBox.setText(consoleBox.getText() + s + "\n");
+	}
+	
+	/**
+	 * return The infoBox from the GameView as JTextArea
+	 * @return JTextArea of infoBox
+	 */
+	public JTextArea getInfoBox(){
+		return infoBox;
 	}
 }//end class
