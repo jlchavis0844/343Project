@@ -8,7 +8,7 @@ public class Card2 extends Card {
 		super("CECS 100",
 				new int[]{},
 				new int[]{14,17},1,
-				new ImageIcon(GameView.class.getResource("/termProject/graphics/card2.jpg")));		
+				new ImageIcon(GameView.class.getResource("/termProject/graphics/card2.png")));		
 	}
 
 	@Override

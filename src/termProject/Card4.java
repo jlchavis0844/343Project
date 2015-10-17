@@ -8,7 +8,7 @@ public class Card4 extends Card {
 		super("Goodbye, Professor",
 				new int[]{6,6,6},
 				new int[]{13},1,
-				new ImageIcon(GameView.class.getResource("/termProject/graphics/card4.jpg")));		
+				new ImageIcon(GameView.class.getResource("/termProject/graphics/card4.png")));		
 	}
 
 	@Override

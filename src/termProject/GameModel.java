@@ -1,5 +1,6 @@
 package termProject;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
@@ -16,6 +17,9 @@ import javax.swing.JTextArea;
 public class GameModel {
 	private PlayerList pList;//construct and contain all our players
 	private RoomList rList;//construct and contain all the rooms
+	private Deck liveDeck;
+	private Deck discardDeck;
+	private ArrayList<Card> masterDeck;
 	
 	/**
 	 * Default constructor for the GameModel class
@@ -23,6 +27,27 @@ public class GameModel {
 	public GameModel(){
 		pList = new PlayerList();
 		rList = new RoomList(21);
+		liveDeck = new Deck();
+		discardDeck = new Deck();
+		
+		//start building master deck
+		masterDeck = new ArrayList<Card>();
+		masterDeck.add(new Card1());
+		masterDeck.add(new Card2());
+		masterDeck.add(new Card3());
+		masterDeck.add(new Card4());
+		/*
+		masterDeck.add(new Card5());
+		masterDeck.add(new Card6());
+		masterDeck.add(new Card7());
+		masterDeck.add(new Card8());
+		masterDeck.add(new Card9());
+		masterDeck.add(new Card10());
+		*/
+		
+		//load current deck for the beginning of the game
+		loadRound1(liveDeck);
+				
 	}
 
 	/**
@@ -145,5 +170,17 @@ public class GameModel {
 		System.out.println(tempStr);
 		
 		
+	}
+	
+	/**
+	 * loads a certain block of cards from the master deck into given deck
+	 * @param d Deck where the cards will be copied to
+	 */
+	public void loadRound1(Deck d){
+	//round 1 will be the first 4 cards (0-3) for test purposes
+		int key = 0; //easier to change later
+		for (int i = 0; i < key; i++){
+			d.addCard(masterDeck.get(i));//add index i to Deck d
+		}
 	}
 }

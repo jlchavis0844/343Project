@@ -16,8 +16,12 @@ public abstract class Card {
 	
 	/**
 	 * Constructor with name, skill prerequisites, room prerequisites, and year
+	 * <p>
+	 * pass an array for the prereq skills in the following order
+	 * learning, craft, integrity. This will be standard for all cards
+	 * </p>
 	 * @param String name - identifies card
-	 * @param int prereqSkill[] - array of skill prerequisites
+	 * @param int prereqSkill[] - array of skill prerequisites L, C, I
 	 * @param int prereqRoom[] - array of room prerequisites
 	 * @param year - year in which the card is played
 	 */
@@ -79,7 +83,7 @@ public abstract class Card {
 	}
 	
 	/**
-	 * @return the img
+	 * @return the icon image
 	 */
 	public ImageIcon getImg() {
 		return img;

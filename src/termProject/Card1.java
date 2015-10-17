@@ -5,10 +5,10 @@ import javax.swing.ImageIcon;
 public class Card1 extends Card {
 	
 	public Card1() {
-		super("Meet the Dean",
-				new int[]{3,3,3},
-				new int[]{12,15},1,
-				new ImageIcon(GameView.class.getResource("/termProject/graphics/card1.jpg")));		
+		super("Meet the Dean",//name
+				new int[]{3,3,3},//learning, craft, integrity
+				new int[]{12,15},1,//rooms you can play the card in
+				new ImageIcon(GameView.class.getResource("/termProject/graphics/card1.png")));		
 	}
 
 	@Override

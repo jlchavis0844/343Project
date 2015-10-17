@@ -2,14 +2,18 @@ package termProject;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+
 import java.awt.Dimension;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -178,7 +182,8 @@ public class GameView extends JFrame {
 							.addGap(14)
 							.addComponent(consoleScrollPane, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))))
 		);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.setLayout(gl_contentPane);//set layout
+		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);//launched maximized
 		
 	}//end constructor
 	
@@ -187,10 +192,10 @@ public class GameView extends JFrame {
 	 * @param listener - The controller that extends listener
 	 */
 	public void registerListener(GameController listener){
-		moveBtn.addActionListener(listener);
-		pCardBtn.addActionListener(listener);
-		moveBox.addListSelectionListener(listener);
-		drawBtn.addActionListener(listener);
+		moveBtn.addActionListener(listener);//for the move button
+		pCardBtn.addActionListener(listener);//for the play card button
+		moveBox.addListSelectionListener(listener);//for the box of possible moves
+		drawBtn.addActionListener(listener);//draw card button
 	}
 	
 	/**
@@ -253,4 +258,36 @@ public class GameView extends JFrame {
 	public JTextArea getInfoBox(){
 		return infoBox;
 	}
+	
+	public void errorDialog(String s){
+		//JOptionPane temp = new JOptionPane();
+		JOptionPane.showMessageDialog(getContentPane(), s, "Oppsy", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public String chipPicker() {
+		JPanel parent = new JPanel();
+		JLabel textLabel = new JLabel("Choose which chip you would like as a reward\n");
+		textLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		//textLabel.setBounds(20, 11, 252, 51);
+		parent.add(textLabel);
+		JRadioButton lc = new JRadioButton("Learning");
+		lc.setBounds(46, 76, 67, 23);
+		JRadioButton cc = new JRadioButton("Crafting");
+		cc.setBounds(118, 76, 65, 23);
+		JRadioButton ic = new JRadioButton("Integrity");
+		ic.setBounds(188, 76, 67, 23);
+		//parent.setLayout(null);
+		parent.add(lc);
+		parent.add(cc);
+		parent.add(ic);
+		
+		JOptionPane.showMessageDialog(null, parent);
+		if(lc.isSelected()){
+			return "Learning";
+		} else if(cc.isSelected()){
+			return "Crafting";
+		} else return "Integrity";
+		
+	}
+	
 }//end class

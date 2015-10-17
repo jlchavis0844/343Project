@@ -47,6 +47,7 @@ public class GameController implements ActionListener, ListSelectionListener{
 			
 		} else if(e.getActionCommand() == "Draw New Card"){//if draw new card button is triggered
 			System.out.println(e.getActionCommand());
+			System.out.println(view.chipPicker());
 		} else {
 			System.out.println("Something went wrong");//error case?
 		}

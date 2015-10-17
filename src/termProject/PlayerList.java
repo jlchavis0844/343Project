@@ -69,17 +69,17 @@ public class PlayerList {
 		//Make 3 playerMarkers
 		playerMarker0 = new JLabel("player1");
 		playerMarker0.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/player1.jpg")));
-		playerMarker0.setBorder(new BevelBorder(BevelBorder.RAISED, Color.RED, null, null, null));
+		playerMarker0.setBorder(new LineBorder(Color.RED, 4));
 		playerMarker0.setBounds(800, 1375, 55, 60);
 		
 		playerMarker1 = new JLabel("player2");
 		playerMarker1.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/player2.jpg")));
-		playerMarker1.setBorder(new BevelBorder(BevelBorder.RAISED, Color.GREEN, null, null, null));;
+		playerMarker1.setBorder(new LineBorder(Color.BLUE, 4));
 		playerMarker1.setBounds(800, 1375+60, 53, 60);
 		
 		playerMarker2 = new JLabel("player3");
 		playerMarker2.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/hoffman.jpg")));
-		playerMarker2.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLUE, null, null, null));
+		playerMarker2.setBorder(new LineBorder(Color.GREEN, 4));
 		playerMarker2.setBounds(800, 1375+120, 48, 60);
 		
 		//load player markers into an array
