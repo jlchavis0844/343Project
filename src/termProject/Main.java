@@ -17,6 +17,8 @@ public class Main {
 		//writes player info to the view infoBox
 		model.updateInfo(view.getInfoBox());
 		
+		view.refreshCards(model.getpList().getHuman().getHand());
+		
 	}//end main function
 
 }//end main class

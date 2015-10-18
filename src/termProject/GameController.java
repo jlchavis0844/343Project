@@ -2,6 +2,8 @@ package termProject;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Vector;
 
 import javax.swing.JList;
@@ -13,7 +15,7 @@ import javax.swing.event.ListSelectionListener;
  * @author James
  * v 1.3
  */
-public class GameController implements ActionListener, ListSelectionListener{
+public class GameController implements ActionListener, ListSelectionListener, MouseListener{
 	private GameModel model; //the model class which holds rooms and players
 	private GameView view;// the view class which is the game board
 	private Room selectedRoom; // when a room selection is made, this room is updated to the selected room
@@ -27,7 +29,12 @@ public class GameController implements ActionListener, ListSelectionListener{
 		model = m;//assigns the model class
 		view = v;// assigns the view class
 	}
+	
+	private Card getCurrentCard(){
+		return model.getpList().getHuman().getHand().get(view.getCurrentCard());
+	}
 
+	
 	/**
 	 * implements the listeners for all buttons in the view
 	 * Buttons include Move Player, Play Card, and Draw New Card
@@ -42,7 +49,9 @@ public class GameController implements ActionListener, ListSelectionListener{
 			}	
 		} else if(e.getActionCommand() == "Play Card"){//if play card button is triggered
 			System.out.println(e.getActionCommand());
-			//call PlayCard() method
+			Player currentPlayer = model.getpList().getHuman();
+			System.out.println(currentPlayer.getPName() + " plays ''" + getCurrentCard().getName() + "''" );
+			//model.playCard(currentPlayer, getCurrentCard());
 			refreshPlayer();
 			
 		} else if(e.getActionCommand() == "Draw New Card"){//if draw new card button is triggered
@@ -106,6 +115,40 @@ public class GameController implements ActionListener, ListSelectionListener{
 			}
 		}
 		model.updateInfo(view.getInfoBox());
+	}
+	
+	/*	Start mouse listener functions
+	 * (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		view.cycleCards(model.getpList().getHuman().getHand());
+		System.out.println("Cycling cards");	
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

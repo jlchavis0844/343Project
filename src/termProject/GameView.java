@@ -38,7 +38,7 @@ public class GameView extends JFrame {
 	private JButton drawBtn; //button that draws another card from the deck
 	private JButton pCardBtn;//the button that plays a card.
 	private JTextArea infoBox;//test box that holds current info about the game
-	private JLabel cardLabel;//the label that holds picture of the current card
+	private CardLabel cardLabel;//the label that holds picture of the current card
 	@SuppressWarnings("unused")
 	private GameModel model;//contains all the player and room info
 	private JScrollPane infoScrollPane;//holds the info box/button objects
@@ -86,7 +86,7 @@ public class GameView extends JFrame {
 		drawBtn = new JButton("Draw New Card");
 		
 		//creates a label to display the card being played
-		cardLabel = new JLabel("New label");
+		cardLabel = new CardLabel("New label");
 		cardLabel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		cardLabel.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/card1.png")));
 		
@@ -196,6 +196,7 @@ public class GameView extends JFrame {
 		pCardBtn.addActionListener(listener);//for the play card button
 		moveBox.addListSelectionListener(listener);//for the box of possible moves
 		drawBtn.addActionListener(listener);//draw card button
+		cardLabel.addMouseListener(listener);//mouse listener to cycle through card deck
 	}
 	
 	/**
@@ -288,6 +289,22 @@ public class GameView extends JFrame {
 			return "Crafting";
 		} else return "Integrity";
 		
+	}
+	
+	public void refreshCards(Hand h){
+		ImageIcon icon = h.get(cardLabel.getCurrent()).getImg();
+		cardLabel.setIcon(icon);
+		System.out.println("Displaying card " + h.get(cardLabel.getCurrent()).getName() +
+				" " + h.get(cardLabel.getCurrent()).getClass().toString());
+	}
+	
+	public void cycleCards(Hand h){
+		cardLabel.increment();
+		refreshCards(h);
+	}
+	
+	public int getCurrentCard(){
+		return cardLabel.getCurrent();
 	}
 	
 }//end class

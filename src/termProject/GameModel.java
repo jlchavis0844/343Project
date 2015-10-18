@@ -32,22 +32,14 @@ public class GameModel {
 		
 		//start building master deck
 		masterDeck = new ArrayList<Card>();
-		masterDeck.add(new Card1());
-		masterDeck.add(new Card2());
-		masterDeck.add(new Card3());
-		masterDeck.add(new Card4());
-		/*
-		masterDeck.add(new Card5());
-		masterDeck.add(new Card6());
-		masterDeck.add(new Card7());
-		masterDeck.add(new Card8());
-		masterDeck.add(new Card9());
-		masterDeck.add(new Card10());
-		*/
+		makeMasterDeck(masterDeck);
 		
 		//load current deck for the beginning of the game
 		loadRound1(liveDeck);
-				
+		Player tempList[] = pList.getPlayerList();
+		buildPlayerHand(tempList[0]);
+		buildPlayerHand(tempList[1]);
+		buildPlayerHand(tempList[2]);	
 	}
 
 	/**
@@ -91,6 +83,7 @@ public class GameModel {
 		int numNeighbors;
 		int neighborIndexChoice;
 		int rNumChoice;
+		
 		whileLoop://labels the while loop as 'whileLoop'
 		while(pList.getCurrent().getMoveCount() < 3){
 			choice = random(2);//random number 0-1
@@ -178,9 +171,81 @@ public class GameModel {
 	 */
 	public void loadRound1(Deck d){
 	//round 1 will be the first 4 cards (0-3) for test purposes
-		int key = 0; //easier to change later
+		int key = 30; //easier to change later
 		for (int i = 0; i < key; i++){
 			d.addCard(masterDeck.get(i));//add index i to Deck d
 		}
 	}
+	
+	/**
+	 * loads cards into the master deck, makes constructor cleaner
+	 * @param md masterdeck to load into
+	 */
+	private void makeMasterDeck(ArrayList<Card> md){
+		md.add(new Card1());
+		md.add(new Card2());
+		md.add(new Card3());
+		md.add(new Card4());
+		md.add(new Card5());
+		md.add(new Card6());
+		md.add(new Card7());
+		md.add(new Card8());
+		md.add(new Card9());
+		md.add(new Card10());
+		md.add(new Card11());
+		md.add(new Card12());
+		md.add(new Card13());
+		md.add(new Card14());
+		md.add(new Card15());
+		md.add(new Card16());
+		md.add(new Card17());
+		md.add(new Card18());
+		md.add(new Card19());
+		md.add(new Card20());
+		md.add(new Card21());
+		md.add(new Card22());
+		md.add(new Card23());
+		md.add(new Card24());
+		md.add(new Card25());
+		md.add(new Card26());
+		md.add(new Card27());
+		md.add(new Card28());
+		md.add(new Card29());
+		md.add(new Card30());
+		md.add(new Card31());
+		md.add(new Card32());
+		md.add(new Card33());
+		md.add(new Card34());
+		md.add(new Card35());
+		md.add(new Card36());
+		md.add(new Card37());
+		md.add(new Card38());
+		md.add(new Card39());
+		md.add(new Card40());
+	}
+	
+	/**
+	 * builds a player's hand
+	 * 
+	 * <p>
+	 * Takes 8 cards from the live deck at random index locations
+	 * and places them into a player's hand using discard() method
+	 * </p>
+	 * @param p
+	 */
+	public void buildPlayerHand(Player p){
+		Hand playerHand = p.getHand();//establish a temp hand
+		int handSize = playerHand.getSize();//this will be set to 8
+		Card tCard = null;//temp card
+		boolean tBool;
+		
+		for(int i = 0; i < handSize; i++){
+			tCard = liveDeck.get(random(liveDeck.getSize()));//get a card from random index
+			System.out.println("adding " + tCard.getName() + " to hand of " + p.getPName());//tracking
+			tBool = liveDeck.discard(tCard,playerHand);//discard temp card from livedeck and add to hand
+			System.out.println("adding card work? :" + tBool);
+		}
+		
+	}
+	
 }

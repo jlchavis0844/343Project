@@ -5,7 +5,7 @@ package termProject;
  * @author James
  *
  */
-public class Hand{
+public class Hand extends Deck{
 	Card cardArr[];
 	int SIZE;
 	
@@ -46,7 +46,16 @@ public class Hand{
 		return false;//card was not discarded
 	}
 	
-	public Card[] getHand(){
-		return cardArr;
+	/**
+	 * returns the size of the hand
+	 */
+	@Override
+	public int getSize(){
+		return SIZE;
+	}
+	
+	@Override
+	public Card get(int i){
+		return cardArr[i];
 	}
 }

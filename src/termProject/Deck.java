@@ -15,8 +15,9 @@ public class Deck {
 		cardList = new ArrayList<Card>();
 	}
 	
-	public void addCard(Card c){
-		cardList.add(c);
+	public boolean addCard(Card c){
+		return cardList.add(c);
+		
 	}
 	
 	/**
@@ -30,6 +31,20 @@ public class Deck {
 		return cardList.remove(c);//remove from current
 	}
 	
-	
+	/**
+	 * returns the size of the deck, how many cards in the deck
+	 * @return
+	 */
+	public int getSize(){
+		return cardList.size();
+	}
 
+	/**
+	 * returns the 
+	 * @param i the index of the card wanted
+	 * @return card at the given index
+	 */
+	public Card get(int i){
+		return cardList.get(i);
+	}
 }
