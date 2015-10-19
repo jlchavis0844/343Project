@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 public class Card7 extends Card {
 	
 	public Card7() {
-		super("Card 5",
+		super("Card 7",
 				new int[]{0,0,0},//learning, craft, integrity
 				new int[]{},//rooms you can play the card in
 				0,//year that the cards belong to

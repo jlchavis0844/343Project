@@ -30,11 +30,21 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 		view = v;// assigns the view class
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	private Card getCurrentCard(){
 		return model.getpList().getHuman().getHand().get(view.getCurrentCard());
 	}
 
-	
+	/**
+	 * 
+	 * @return
+	 */
+	private Player getHuman(){
+		return model.getpList().getHuman();
+	}
 	/**
 	 * implements the listeners for all buttons in the view
 	 * Buttons include Move Player, Play Card, and Draw New Card
@@ -49,14 +59,28 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			}	
 		} else if(e.getActionCommand() == "Play Card"){//if play card button is triggered
 			System.out.println(e.getActionCommand());
-			Player currentPlayer = model.getpList().getHuman();
+			Player currentPlayer = getHuman();
 			System.out.println(currentPlayer.getPName() + " plays ''" + getCurrentCard().getName() + "''" );
+			getHuman().getHand().discard(getCurrentCard(), model.getDiscardDeck());
 			//model.playCard(currentPlayer, getCurrentCard());
+			view.refreshCards(getHuman().getHand());
+			
+			if(getHuman().getHand().isFull()){
+				view.toggleDraw(false);
+			} else {
+				view.toggleDraw(true);
+			}
 			refreshPlayer();
 			
 		} else if(e.getActionCommand() == "Draw New Card"){//if draw new card button is triggered
 			System.out.println(e.getActionCommand());
-			System.out.println(view.chipPicker());
+			model.drawCard(getHuman().getHand());
+			view.setCurrentCard(getHuman().getHand().getLastAdded());//sets the recently added card to the current card
+			view.refreshCards(getHuman().getHand());
+			if(getHuman().getHand().isFull()){
+				view.toggleDraw(false);
+			}
+			//System.out.println(view.chipPicker());
 		} else {
 			System.out.println("Something went wrong");//error case?
 		}
@@ -115,7 +139,9 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			}
 		}
 		model.updateInfo(view.getInfoBox());
+		
 	}
+	
 	
 	/*	Start mouse listener functions
 	 * (non-Javadoc)

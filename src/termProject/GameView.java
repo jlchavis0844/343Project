@@ -89,6 +89,7 @@ public class GameView extends JFrame {
 		
 		//creates draw new card button
 		drawBtn = new JButton("Draw New Card");
+		drawBtn.setEnabled(false);//disable draw button
 		
 		//creates the player information box
 		infoBox = new JTextArea();
@@ -321,11 +322,18 @@ public class GameView extends JFrame {
 	
 	@SuppressWarnings("unchecked")
 	public void refreshCards(Hand h){
+		Card tCard  = h.get(currentCard);
+		while(tCard == null){
+			currentCard++;
+			if (currentCard == 8){
+				currentCard = 0;
+			}
+			tCard  = h.get(currentCard);
+		}
 		ImageIcon icon = h.get(currentCard).getImg();
 		cardLabel.setIcon(icon);
-		
-		cardList.setListData(new String[]{h.get(0).getName(),h.get(1).getName(),h.get(2).getName(),
-			h.get(3).getName(),h.get(4).getName(),h.get(5).getName(),h.get(6).getName(),h.get(7).getName()});
+		HandList tempCList = new HandList(h);
+		cardList.setListData(tempCList.getNames());
 		cardList.setSelectedIndex(currentCard);
 		System.out.println("Displaying card " + h.get(currentCard).getName() +
 				" " + h.get(currentCard).getClass().toString());
@@ -341,5 +349,17 @@ public class GameView extends JFrame {
 	
 	public int getCurrentCard(){
 		return currentCard;
+	}
+	
+	/**
+	 * Enables / Disables the draw button depending on Boolean given
+	 * @param b True enables, false disables
+	 */
+	public void toggleDraw(Boolean b){
+		drawBtn.setEnabled(b);
+	}
+	
+	public void setCurrentCard(int i){
+		currentCard = i;
 	}
 }//end class

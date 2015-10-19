@@ -6,12 +6,14 @@ package termProject;
  *
  */
 public class Hand extends Deck{
-	Card cardArr[];
-	int SIZE;
+	private Card cardArr[];
+	private int SIZE;
+	private int lastAdded;
 	
 	public Hand(int s) {
 		SIZE = s;
 		cardArr = new Card[SIZE];
+		lastAdded = s-1;
 	}
 
 	/**
@@ -23,6 +25,7 @@ public class Hand extends Deck{
 		for(int i = 0; i < cardArr.length; i++){//go through the array
 			if(!(cardArr[i] instanceof Card)){//if current spot is not a card
 				cardArr[i] = c;//assign this card to the empty spot
+				lastAdded = i;
 				return true;//return true, card was added
 			}
 		}
@@ -35,12 +38,15 @@ public class Hand extends Deck{
 	 * @param d add removed card to this deck
 	 * @return boolean of whether the card was found and removed.
 	 */
-	public boolean discardCard(Card c, Deck d){
+	@Override
+	public boolean discard(Card c, Deck d){
 		for(int i = 0; i < cardArr.length; i++){//go through the hand
-			if(cardArr[i].equals(c)){//check if the current card is what we are looking for
-				d.addCard(cardArr[i]);//add to discard deck
-				cardArr[i] = null;//set card's spot to null
-				return true;//card was discarded
+			if(cardArr[i] != null){
+				if(cardArr[i].equals(c)){//check if the current card is what we are looking for
+					d.addCard(cardArr[i]);//add to discard deck
+					cardArr[i] = null;//set card's spot to null
+					return true;//card was discarded
+				}
 			}
 		}
 		return false;//card was not discarded
@@ -57,5 +63,26 @@ public class Hand extends Deck{
 	@Override
 	public Card get(int i){
 		return cardArr[i];
+	}
+	
+	/**
+	 * Returns false if one empty spot is found.
+	 * @return
+	 */
+	public boolean isFull(){
+		for(Card c: cardArr){
+			if(c == null){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * returns the index location of the last added card
+	 * @return the index number
+	 */
+	public int getLastAdded(){
+		return lastAdded;
 	}
 }

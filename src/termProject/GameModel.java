@@ -248,4 +248,13 @@ public class GameModel {
 		
 	}
 	
+	public Deck getDiscardDeck(){
+		return discardDeck;
+	}
+	
+	
+	public void drawCard(Hand h){
+		Card tempCard = liveDeck.get(random(liveDeck.getSize()));
+		liveDeck.discard(tempCard, h);
+	}
 }
