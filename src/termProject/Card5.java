@@ -5,15 +5,16 @@ import javax.swing.ImageIcon;
 public class Card5 extends Card {
 	
 	public Card5() {
-		super("Goodbye, Professor",
-				new int[]{6,6,6},
-				new int[]{13},1,
-				new ImageIcon(GameView.class.getResource("/termProject/graphics/card4.png")));		
+		super("Card 5",
+				new int[]{0,0,0},//learning, craft, integrity
+				new int[]{},//rooms you can play the card in
+				0,//year that the cards belong to
+				new ImageIcon(GameView.class.getResource("/termProject/graphics/card5.png")));		
 	}
 
 	@Override
 	public void rewards(Player p) {
-		p.changeQP(10);
+		//p.changeQP(10);
 	}
 
 	@Override

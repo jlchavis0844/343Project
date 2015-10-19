@@ -21,6 +21,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.SystemColor;
 
 /**
  * JPanel constructor used to draw game board and run most game functions
@@ -38,7 +39,7 @@ public class GameView extends JFrame {
 	private JButton drawBtn; //button that draws another card from the deck
 	private JButton pCardBtn;//the button that plays a card.
 	private JTextArea infoBox;//test box that holds current info about the game
-	private CardLabel cardLabel;//the label that holds picture of the current card
+	private JLabel cardLabel;//the label that holds picture of the current card
 	@SuppressWarnings("unused")
 	private GameModel model;//contains all the player and room info
 	private JScrollPane infoScrollPane;//holds the info box/button objects
@@ -51,6 +52,9 @@ public class GameView extends JFrame {
 	private JLabel playerMarker2; //label for player #3
 	private JTextArea consoleBox; //holds scrolling info about moves made ect.
 	private JScrollPane consoleScrollPane;
+	private int currentCard;
+	private JPanel deckPanel;
+	private JList cardList;
 
 	/**
 	 * Create the frame.
@@ -60,6 +64,7 @@ public class GameView extends JFrame {
 		
 		//set model
 		this.model = model;
+		currentCard = 0;//starts the deck label at the beginning
 		
 		//construct JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,11 +89,6 @@ public class GameView extends JFrame {
 		
 		//creates draw new card button
 		drawBtn = new JButton("Draw New Card");
-		
-		//creates a label to display the card being played
-		cardLabel = new CardLabel("New label");
-		cardLabel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		cardLabel.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/card1.png")));
 		
 		//creates the player information box
 		infoBox = new JTextArea();
@@ -117,7 +117,8 @@ public class GameView extends JFrame {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addComponent(backgroundScrollPane, GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(infoScrollPane, GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
+					.addComponent(infoScrollPane, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		getContentPane().setLayout(groupLayout);
 		
@@ -141,23 +142,33 @@ public class GameView extends JFrame {
 		consoleBox.setEditable(false);
 		consoleBox.setLineWrap(true);
 		consoleBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{moveBox, drawBtn, moveBtn, pCardBtn, cardLabel, consoleBox, infoBox}));
 		
 		//prime console box
 		consoleBox.setText("starting game\n");
+		
+		deckPanel = new JPanel();
+		deckPanel.setLayout(null);
+		
+		//creates a label to display the card being played
+		cardLabel = new JLabel("New label");
+		cardLabel.setBounds(129, 35, 207, 275);
+		deckPanel.add(cardLabel);
+		cardLabel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		cardLabel.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/card1.png")));
+		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{moveBox, drawBtn, moveBtn, pCardBtn, cardLabel, consoleBox, infoBox}));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(10)
-					.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)
+					.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
 					.addGap(10)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-						.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-						.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
+						.addComponent(drawBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(moveBtn, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+						.addComponent(pCardBtn, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE))
 					.addGap(10)
-					.addComponent(cardLabel, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
+					.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE)
 					.addGap(4)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(consoleScrollPane, GroupLayout.DEFAULT_SIZE, 1212, Short.MAX_VALUE)
@@ -167,23 +178,40 @@ public class GameView extends JFrame {
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(28)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 305, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(6)
+							.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(6)
 							.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
 							.addGap(5)
 							.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
 							.addGap(5)
 							.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE))
-						.addComponent(cardLabel)
 						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(6)
+							.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(28)
 							.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
 							.addGap(14)
-							.addComponent(consoleScrollPane, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(consoleScrollPane, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)))
+					.addGap(6))
 		);
-		contentPane.setLayout(gl_contentPane);//set layout
+		
+		cardList = new JList();
+		cardList.setEnabled(false);
+		cardList.setValueIsAdjusting(true);
+		cardList.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		cardList.setBackground(SystemColor.menu);
+		cardList.setBounds(10, 35, 110, 264);
+		cardList.setSelectionMode(0);
+		deckPanel.add(cardList);
+				
+		contentPane.setLayout(gl_contentPane);
 		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);//launched maximized
+		
 		
 	}//end constructor
 	
@@ -291,20 +319,27 @@ public class GameView extends JFrame {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void refreshCards(Hand h){
-		ImageIcon icon = h.get(cardLabel.getCurrent()).getImg();
+		ImageIcon icon = h.get(currentCard).getImg();
 		cardLabel.setIcon(icon);
-		System.out.println("Displaying card " + h.get(cardLabel.getCurrent()).getName() +
-				" " + h.get(cardLabel.getCurrent()).getClass().toString());
+		
+		cardList.setListData(new String[]{h.get(0).getName(),h.get(1).getName(),h.get(2).getName(),
+			h.get(3).getName(),h.get(4).getName(),h.get(5).getName(),h.get(6).getName(),h.get(7).getName()});
+		cardList.setSelectedIndex(currentCard);
+		System.out.println("Displaying card " + h.get(currentCard).getName() +
+				" " + h.get(currentCard).getClass().toString());
 	}
 	
 	public void cycleCards(Hand h){
-		cardLabel.increment();
+		currentCard++;
+		if (currentCard == 8){
+			currentCard = 0;
+		}
 		refreshCards(h);
 	}
 	
 	public int getCurrentCard(){
-		return cardLabel.getCurrent();
+		return currentCard;
 	}
-	
 }//end class

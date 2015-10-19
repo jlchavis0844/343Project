@@ -97,7 +97,7 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 	 * Sets the next player in pList as current and refreshes moveBox 
 	 */
 	private void refreshPlayer(){
-		view.toConsole(model.getpList().getCurrent().getPName() + " plays his card.");
+		view.toConsole(model.getpList().getCurrent().getPName() + " plays card " + getCurrentCard().getName());
 		model.getpList().setNextPlayer();//get the next player
 		view.enableMoveBox();//turn the move button on
 		startAITurns();//start the AI run of turns
