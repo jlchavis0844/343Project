@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -11,6 +12,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
@@ -19,16 +21,19 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.SystemColor;
+import javax.swing.JTextPane;
 
 /**
  * JPanel constructor used to draw game board and run most game functions
  * @author James
  *
  */
-public class GameView extends JFrame {
+public class GameView extends JFrame implements Runnable{
 	private static final long serialVersionUID = 1L;//Suppresses warnings
 	private JScrollPane backgroundScrollPane;//the scroll pane for the background
 	private JPanel contentPane; //the panel for all the goodies
@@ -55,6 +60,7 @@ public class GameView extends JFrame {
 	private int currentCard;
 	private JPanel deckPanel;
 	private JList cardList;
+	private JLabel deckTitle;
 
 	/**
 	 * Create the frame.
@@ -152,7 +158,8 @@ public class GameView extends JFrame {
 		
 		//creates a label to display the card being played
 		cardLabel = new JLabel("New label");
-		cardLabel.setBounds(129, 35, 207, 275);
+		cardLabel.setToolTipText("Click to cylce cards");
+		cardLabel.setBounds(129, 62, 207, 275);
 		deckPanel.add(cardLabel);
 		cardLabel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		cardLabel.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/card1.png")));
@@ -163,12 +170,12 @@ public class GameView extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(10)
 					.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-					.addGap(10)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(drawBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(moveBtn, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
 						.addComponent(pCardBtn, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE))
-					.addGap(10)
+					.addGap(14)
 					.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE)
 					.addGap(4)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -185,33 +192,76 @@ public class GameView extends JFrame {
 							.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(6)
-							.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-							.addGap(5)
-							.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-							.addGap(5)
-							.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(6)
 							.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(28)
 							.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
 							.addGap(14)
-							.addComponent(consoleScrollPane, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)))
-					.addGap(6))
+							.addComponent(consoleScrollPane, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(66)
+							.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(11, Short.MAX_VALUE))
 		);
 		
 		cardList = new JList();
+		cardList.setToolTipText("highlighted card is currently displayed card");
 		cardList.setEnabled(false);
 		cardList.setValueIsAdjusting(true);
 		cardList.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		cardList.setBackground(SystemColor.menu);
-		cardList.setBounds(10, 35, 110, 264);
+		cardList.setBounds(10, 60, 110, 256);
 		cardList.setSelectionMode(0);
 		deckPanel.add(cardList);
-				
+		
+		deckTitle = new JLabel("Your Deck of Cards");
+		deckTitle.setFont(new Font("Tahoma", Font.BOLD, 16));
+		deckTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		deckTitle.setLabelFor(cardLabel);
+		deckTitle.setBounds(129, 35, 207, 24);
+		deckPanel.add(deckTitle);
+		
+		JTextArea txtpnListOfCards = new JTextArea();
+		txtpnListOfCards.setFont(new Font("Tahoma", Font.BOLD, 16));
+		txtpnListOfCards.setBackground(SystemColor.menu);
+		txtpnListOfCards.setLineWrap(true);
+		txtpnListOfCards.setText("List of Cards in Your Deck");
+		txtpnListOfCards.setBounds(10, 11, 110, 49);
+		deckPanel.add(txtpnListOfCards);
+						
 		contentPane.setLayout(gl_contentPane);
 		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);//launched maximized
+		
+		/**
+		 * fun little thread that flashes the human player's boarder yet every half second
+		 */
+		Thread flasher = new Thread(){//thread that outputs planets every 2 seconds
+			public void run(){//start run
+				boolean toggle = true;//On - Off
+				Border base = markers[model.getpList().getHumNum()].getBorder(); //Establishes the human player normal boarder
+				try{//start try/catch
+					while(true){//always run
+						if(toggle){//if On
+							markers[model.getpList().getHumNum()].setBorder(new LineBorder(Color.YELLOW, 4));//set boarder yellow
+							toggle = !toggle;//flip to off
+						} else {//if off
+							markers[model.getpList().getHumNum()].setBorder(base);//set the board to normal
+							toggle = !toggle;//flip to on
+						}
+						Thread.sleep(500);//wait 0.5 seconds and do it again
+					}
+				}catch(InterruptedException e){//exception handling
+					System.out.println("Client listener Interrupted");
+					System.out.println(e.getMessage());
+				}//end catch
+			}//end run
+		};//end flasher
+		flasher.start();//run flasher thread
+		
 		
 		
 	}//end constructor
@@ -361,5 +411,11 @@ public class GameView extends JFrame {
 	
 	public void setCurrentCard(int i){
 		currentCard = i;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }//end class

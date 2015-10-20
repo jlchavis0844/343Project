@@ -154,7 +154,7 @@ public class GameModel {
 			System.out.println(tempStr);//send to console
 		}
 		//additional info not really needed now
-		infoBox.append("\nCards in Deck :" + "\t Discards out of play: \n");
+		infoBox.append("\nCards in Deck :" + liveDeck.getCardCount()+ "\t Discards out of play:" + discardDeck.getCardCount() + "\n");
 		Player tPlay = pList.getHuman();
 		rList.getRoom(tPlay.getRNumLocation()).getRoomName();
 		tempStr = "You are " + tPlay.getPName();
@@ -257,4 +257,10 @@ public class GameModel {
 		Card tempCard = liveDeck.get(random(liveDeck.getSize()));
 		liveDeck.discard(tempCard, h);
 	}
+	
+	public Deck getLiveDeck(){
+		return liveDeck;
+	}
+	
+
 }

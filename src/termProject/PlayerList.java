@@ -141,6 +141,14 @@ public class PlayerList {
 	}
 	
 	/**
+	 * returns the human index
+	 * @return index of the human player
+	 */
+	public int getHumNum(){
+		return human;
+	}
+	
+	/**
 	 * get the current player in play
 	 * @return current - Player that is the current Player
 	 */

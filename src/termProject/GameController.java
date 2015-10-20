@@ -64,8 +64,8 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			getHuman().getHand().discard(getCurrentCard(), model.getDiscardDeck());
 			//model.playCard(currentPlayer, getCurrentCard());
 			view.refreshCards(getHuman().getHand());
-			
-			if(getHuman().getHand().isFull()){
+			model.updateInfo(view.getInfoBox());
+			if(getHuman().getHand().isFull() || model.getLiveDeck().getSize() == 0){
 				view.toggleDraw(false);
 			} else {
 				view.toggleDraw(true);
@@ -77,7 +77,8 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			model.drawCard(getHuman().getHand());
 			view.setCurrentCard(getHuman().getHand().getLastAdded());//sets the recently added card to the current card
 			view.refreshCards(getHuman().getHand());
-			if(getHuman().getHand().isFull()){
+			model.updateInfo(view.getInfoBox());
+			if(getHuman().getHand().isFull() || model.getLiveDeck().getSize() == 0){
 				view.toggleDraw(false);
 			}
 			//System.out.println(view.chipPicker());

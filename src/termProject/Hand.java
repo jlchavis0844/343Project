@@ -66,6 +66,14 @@ public class Hand extends Deck{
 	}
 	
 	/**
+	 * returns the index location of the last added card
+	 * @return the index number
+	 */
+	public int getLastAdded(){
+		return lastAdded;
+	}
+	
+	/**
 	 * Returns false if one empty spot is found.
 	 * @return
 	 */
@@ -76,13 +84,5 @@ public class Hand extends Deck{
 			}
 		}
 		return true;
-	}
-	
-	/**
-	 * returns the index location of the last added card
-	 * @return the index number
-	 */
-	public int getLastAdded(){
-		return lastAdded;
 	}
 }

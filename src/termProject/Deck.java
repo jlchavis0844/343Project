@@ -47,4 +47,31 @@ public class Deck {
 	public Card get(int i){
 		return cardList.get(i);
 	}
+	
+	/**
+	 * counts how many active cards are in the deck
+	 * @return number of Card objects in deck
+	 */
+	public int getCardCount(){
+		int i = 0;
+		for (Card c: cardList){
+			if(c instanceof Card){
+				i++;
+			}
+		}
+		return i;
+	}
+	
+	/**
+	 * Returns false if one empty spot is found.
+	 * @return
+	 */
+	public boolean isFull(){
+		for(Card c: cardList){
+			if(c == null){
+				return false;
+			}
+		}
+		return true;
+	}
 }
