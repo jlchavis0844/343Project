@@ -14,11 +14,13 @@ public class AI extends Player{
 		super(pName, learning, craft, integrity);
 		type = "ai";
 	}
-	
-	public void startTurn(){
-		
+
+	@Override
+	public Hand getHand() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
 	
 	
 	

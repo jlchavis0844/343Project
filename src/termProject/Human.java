@@ -9,15 +9,16 @@ package termProject;
 public class Human extends Player{
 	
 	String type;
+	Hand pHand;
 	
 	public Human(String pName, int learning, int craft, int integrity){
 		super(pName, learning, craft, integrity);
 		type = "human";
+		pHand = new Hand(); 
+	}	
+	
+	
+	public Hand getHand(){
+		return pHand;
 	}
-	
-	public void startTurn(){
-		
-	}
-	
-	
 }

@@ -27,6 +27,10 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.SystemColor;
 import javax.swing.JTextPane;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  * JPanel constructor used to draw game board and run most game functions
@@ -164,6 +168,16 @@ public class GameView extends JFrame implements Runnable{
 		cardLabel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		cardLabel.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/card1.png")));
 		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{moveBox, drawBtn, moveBtn, pCardBtn, cardLabel, consoleBox, infoBox}));
+		
+		JButton btnTestButton = new JButton("test button");
+		btnTestButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				new ChipPicker(model.getpList().getHuman());
+				//test code
+				//chipPicker();
+			}
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -172,15 +186,20 @@ public class GameView extends JFrame implements Runnable{
 					.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(drawBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(moveBtn, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
-						.addComponent(pCardBtn, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE))
-					.addGap(14)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(drawBtn, GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+								.addComponent(moveBtn, GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+								.addComponent(pCardBtn, GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
+							.addGap(14))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(btnTestButton)
+							.addPreferredGap(ComponentPlacement.RELATED)))
 					.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE)
 					.addGap(4)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(consoleScrollPane, GroupLayout.DEFAULT_SIZE, 1212, Short.MAX_VALUE)
-						.addComponent(infoBox, GroupLayout.DEFAULT_SIZE, 1212, Short.MAX_VALUE))
+						.addComponent(consoleScrollPane, GroupLayout.DEFAULT_SIZE, 1306, Short.MAX_VALUE)
+						.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 1306, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
@@ -204,8 +223,10 @@ public class GameView extends JFrame implements Runnable{
 							.addGap(5)
 							.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
 							.addGap(5)
-							.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(11, Short.MAX_VALUE))
+							.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+							.addGap(31)
+							.addComponent(btnTestButton)))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
 		cardList = new JList();
@@ -239,7 +260,7 @@ public class GameView extends JFrame implements Runnable{
 		/**
 		 * fun little thread that flashes the human player's boarder yet every half second
 		 */
-		Thread flasher = new Thread(){//thread that outputs planets every 2 seconds
+		Thread flasher = new Thread(){//thread that flashes yellow border every 500ms
 			public void run(){//start run
 				boolean toggle = true;//On - Off
 				Border base = markers[model.getpList().getHumNum()].getBorder(); //Establishes the human player normal boarder
@@ -247,11 +268,10 @@ public class GameView extends JFrame implements Runnable{
 					while(true){//always run
 						if(toggle){//if On
 							markers[model.getpList().getHumNum()].setBorder(new LineBorder(Color.YELLOW, 4));//set boarder yellow
-							toggle = !toggle;//flip to off
 						} else {//if off
 							markers[model.getpList().getHumNum()].setBorder(base);//set the board to normal
-							toggle = !toggle;//flip to on
 						}
+						toggle = !toggle;//flip to on
 						Thread.sleep(500);//wait 0.5 seconds and do it again
 					}
 				}catch(InterruptedException e){//exception handling
@@ -344,42 +364,19 @@ public class GameView extends JFrame implements Runnable{
 		JOptionPane.showMessageDialog(getContentPane(), s, "Oppsy", JOptionPane.ERROR_MESSAGE);
 	}
 	
-	public String chipPicker() {
-		JPanel parent = new JPanel();
-		JLabel textLabel = new JLabel("Choose which chip you would like as a reward\n");
-		textLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		//textLabel.setBounds(20, 11, 252, 51);
-		parent.add(textLabel);
-		JRadioButton lc = new JRadioButton("Learning");
-		lc.setBounds(46, 76, 67, 23);
-		JRadioButton cc = new JRadioButton("Crafting");
-		cc.setBounds(118, 76, 65, 23);
-		JRadioButton ic = new JRadioButton("Integrity");
-		ic.setBounds(188, 76, 67, 23);
-		//parent.setLayout(null);
-		parent.add(lc);
-		parent.add(cc);
-		parent.add(ic);
-		
-		JOptionPane.showMessageDialog(null, parent);
-		if(lc.isSelected()){
-			return "Learning";
-		} else if(cc.isSelected()){
-			return "Crafting";
-		} else return "Integrity";
-		
-	}
+
 	
 	@SuppressWarnings("unchecked")
 	public void refreshCards(Hand h){
 		Card tCard  = h.get(currentCard);
 		while(tCard == null){
 			currentCard++;
-			if (currentCard == 8){
+			if (currentCard == h.getSize()){
 				currentCard = 0;
 			}
 			tCard  = h.get(currentCard);
 		}
+		
 		ImageIcon icon = h.get(currentCard).getImg();
 		cardLabel.setIcon(icon);
 		HandList tempCList = new HandList(h);
@@ -391,7 +388,7 @@ public class GameView extends JFrame implements Runnable{
 	
 	public void cycleCards(Hand h){
 		currentCard++;
-		if (currentCard == 8){
+		if (currentCard == h.getSize()){
 			currentCard = 0;
 		}
 		refreshCards(h);

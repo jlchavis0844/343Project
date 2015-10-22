@@ -50,19 +50,19 @@ public class PlayerList {
 		switch(human){
 		case 0:
 			players[0] = new Human("James", 2,2,2);
-			players[1] = new Player("Sylvia", 3,1,2);
-			players[2] = new Player("Dr. Hoffman", 0,3,3);
+			players[1] = new AI("Sylvia", 3,1,2);
+			players[2] = new AI("Dr. Hoffman", 0,3,3);
 			break;
 			
 		case 1:
-			players[0] = new Player("James", 2,2,2);
+			players[0] = new AI("James", 2,2,2);
 			players[1] = new Human("Sylvia", 3,1,2);
-			players[2] = new Player("Dr. Hoffman", 0,3,3);
+			players[2] = new AI("Dr. Hoffman", 0,3,3);
 			break;
 			
 		case 2:
-			players[0] = new Player("James", 2,2,2);
-			players[1] = new Player("Sylvia", 3,1,2);
+			players[0] = new AI("James", 2,2,2);
+			players[1] = new AI("Sylvia", 3,1,2);
 			players[2] = new Human("Dr. Hoffman", 0,3,3);
 			break;
 		}

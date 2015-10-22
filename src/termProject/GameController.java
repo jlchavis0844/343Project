@@ -150,7 +150,7 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		view.cycleCards(model.getpList().getHuman().getHand());
+		view.cycleCards(getHuman().getHand());
 		System.out.println("Cycling cards");	
 	}
 

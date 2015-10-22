@@ -6,14 +6,15 @@ package termProject;
  *
  */
 public class Hand extends Deck{
-	private Card cardArr[];
-	private int SIZE;
-	private int lastAdded;
+	//private Card cardArr[];
+	//private int lastAdded;
+	//private ArrayList<Card> cardList;
 	
-	public Hand(int s) {
-		SIZE = s;
-		cardArr = new Card[SIZE];
-		lastAdded = s-1;
+	
+	public Hand() {
+		super();
+		//cardArr = new Card[SIZE];
+		//lastAdded = s-1;
 	}
 
 	/**
@@ -22,14 +23,8 @@ public class Hand extends Deck{
 	 * @return whether the card was added or not
 	 */
 	public boolean addCard(Card c){
-		for(int i = 0; i < cardArr.length; i++){//go through the array
-			if(!(cardArr[i] instanceof Card)){//if current spot is not a card
-				cardArr[i] = c;//assign this card to the empty spot
-				lastAdded = i;
-				return true;//return true, card was added
-			}
-		}
-		return false;//no card was added, return false
+		cardList.add(c);
+		return true;//legacy
 	}
 	
 	/**
@@ -40,29 +35,19 @@ public class Hand extends Deck{
 	 */
 	@Override
 	public boolean discard(Card c, Deck d){
-		for(int i = 0; i < cardArr.length; i++){//go through the hand
-			if(cardArr[i] != null){
-				if(cardArr[i].equals(c)){//check if the current card is what we are looking for
-					d.addCard(cardArr[i]);//add to discard deck
-					cardArr[i] = null;//set card's spot to null
-					return true;//card was discarded
-				}
+		boolean tBool = false;//holds whether the remove is successful
+		for(int i = 0; i < cardList.size(); i++){//go through the hand
+			tBool = cardList.remove(c);
+			if(tBool == true){//if the card is found
+				d.addCard(c); //add card to discard deck
 			}
 		}
-		return false;//card was not discarded
+		return tBool;//return whether the card 
 	}
-	
-	/**
-	 * returns the size of the hand
-	 */
-	@Override
-	public int getSize(){
-		return SIZE;
-	}
-	
+
 	@Override
 	public Card get(int i){
-		return cardArr[i];
+		return cardList.get(i);
 	}
 	
 	/**
@@ -70,7 +55,7 @@ public class Hand extends Deck{
 	 * @return the index number
 	 */
 	public int getLastAdded(){
-		return lastAdded;
+		return cardList.size() - 1;
 	}
 	
 	/**
@@ -78,11 +63,6 @@ public class Hand extends Deck{
 	 * @return
 	 */
 	public boolean isFull(){
-		for(Card c: cardArr){
-			if(c == null){
-				return false;
-			}
-		}
-		return true;
+		return cardList.size() >= 7;
 	}
 }

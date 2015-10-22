@@ -6,7 +6,7 @@ package termProject;
  * @author Sylvia
  *v 1.0
  */
-public class Player {
+public abstract class Player {
 	private String playerName;
 	private int learning;
 	private int craft;
@@ -14,7 +14,6 @@ public class Player {
 	private int qp;
 	private int rNumLocation;
 	private int moveCount;
-	private Hand pHand;
 	
 	/**
 	 * constructor with name, learning, craft, and integrity of the player
@@ -31,7 +30,6 @@ public class Player {
 		qp = 0;
 		rNumLocation = 17; // all players start the game at ECS308
 		moveCount = 0;
-		pHand = new Hand(8);//creates and empty player hand
 	}
 	
 	/**
@@ -153,10 +151,6 @@ public class Player {
 		rNumLocation = room;
 		moveCount++;
 	}
-	
-	public Hand getHand(){
-		return pHand;
-	}
-	
-	
+
+	public abstract Hand getHand();
 }

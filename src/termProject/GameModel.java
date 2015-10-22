@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import javax.swing.JTextArea;
 
+
 /**
  * Class that builds the model
  * <p>
@@ -20,7 +21,7 @@ public class GameModel {
 	private Deck liveDeck;
 	private Deck discardDeck;
 	private ArrayList<Card> masterDeck;
-	
+
 	/**
 	 * Default constructor for the GameModel class
 	 */
@@ -36,10 +37,7 @@ public class GameModel {
 		
 		//load current deck for the beginning of the game
 		loadRound1(liveDeck);
-		Player tempList[] = pList.getPlayerList();
-		buildPlayerHand(tempList[0]);
-		buildPlayerHand(tempList[1]);
-		buildPlayerHand(tempList[2]);	
+		buildPlayerHand(pList.getHuman());	
 	}
 
 	/**
@@ -235,11 +233,10 @@ public class GameModel {
 	 */
 	public void buildPlayerHand(Player p){
 		Hand playerHand = p.getHand();//establish a temp hand
-		int handSize = playerHand.getSize();//this will be set to 8
 		Card tCard = null;//temp card
 		boolean tBool;
 		
-		for(int i = 0; i < handSize; i++){
+		for(int i = 0; i < 5; i++){
 			tCard = liveDeck.get(random(liveDeck.getSize()));//get a card from random index
 			System.out.println("adding " + tCard.getName() + " to hand of " + p.getPName());//tracking
 			tBool = liveDeck.discard(tCard,playerHand);//discard temp card from livedeck and add to hand
@@ -261,6 +258,4 @@ public class GameModel {
 	public Deck getLiveDeck(){
 		return liveDeck;
 	}
-	
-
 }
