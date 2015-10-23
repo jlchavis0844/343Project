@@ -108,4 +108,11 @@ public abstract class Card {
 	 */
 	public abstract void fail(Player p);
 	
+	/**
+	 * causes the playing of the card and other stuff
+	 * @param p the player playing the card
+	 * @return if any card action is to be taken
+	 */
+	public abstract CardAction play(Player p);
+	
 }

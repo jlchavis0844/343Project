@@ -2,7 +2,6 @@ package termProject;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.JScrollPane;
@@ -26,18 +25,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.SystemColor;
-import javax.swing.JTextPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 /**
  * JPanel constructor used to draw game board and run most game functions
  * @author James
  *
  */
-public class GameView extends JFrame implements Runnable{
+public class GameView extends JFrame{
 	private static final long serialVersionUID = 1L;//Suppresses warnings
 	private JScrollPane backgroundScrollPane;//the scroll pane for the background
 	private JPanel contentPane; //the panel for all the goodies
@@ -60,11 +56,11 @@ public class GameView extends JFrame implements Runnable{
 	@SuppressWarnings("unused")
 	private JLabel playerMarker2; //label for player #3
 	private JTextArea consoleBox; //holds scrolling info about moves made ect.
-	private JScrollPane consoleScrollPane;
-	private int currentCard;
-	private JPanel deckPanel;
-	private JList cardList;
-	private JLabel deckTitle;
+	private JScrollPane consoleScrollPane;//holds conolse text area
+	private int currentCard;//int of the current card index
+	private JPanel deckPanel;//holds deck info
+	private JList cardList;//list of cards in human hand
+	private JLabel deckTitle;//label above the deck
 
 	/**
 	 * Create the frame.
@@ -81,7 +77,6 @@ public class GameView extends JFrame implements Runnable{
 		setBounds(10, 10, 1900, 1060);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		//JScrollPane scrPane = new JScrollPane(contentPane);
 		
 		//build scroll panel for the console
 		boardBack = new JLabel("Game Background");
@@ -96,10 +91,11 @@ public class GameView extends JFrame implements Runnable{
 		moveBox = new JList();
 		moveBox.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		moveBox.setListData(model.getrList().getNeighborNames(17));
+		moveBox.setEnabled(false);//start disabled
 		
 		//creates draw new card button
 		drawBtn = new JButton("Draw New Card");
-		drawBtn.setEnabled(false);//disable draw button
+		drawBtn.setEnabled(true);//enables draw button
 		
 		//creates the player information box
 		infoBox = new JTextArea();
@@ -114,6 +110,7 @@ public class GameView extends JFrame implements Runnable{
 		
 		//create play card button
 		pCardBtn = new JButton("Play Card");
+		pCardBtn.setEnabled(false);//turn off play card to start
 
 		//create a scroll pane for the info boxes and buttons
 		infoScrollPane = new JScrollPane(contentPane);
@@ -173,61 +170,12 @@ public class GameView extends JFrame implements Runnable{
 		btnTestButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				new ChipPicker(model.getpList().getHuman());
-				//test code
-				//chipPicker();
+				ChipPicker cp = new ChipPicker(model.getpList().getHuman());
+				model.updateInfo(infoBox);
+				toConsole(cp.getChoiceStr());
 			}
 		});
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(10)
-					.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(drawBtn, GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
-								.addComponent(moveBtn, GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
-								.addComponent(pCardBtn, GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
-							.addGap(14))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnTestButton)
-							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE)
-					.addGap(4)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(consoleScrollPane, GroupLayout.DEFAULT_SIZE, 1306, Short.MAX_VALUE)
-						.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 1306, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(6)
-							.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(6)
-							.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(28)
-							.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-							.addGap(14)
-							.addComponent(consoleScrollPane, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(66)
-							.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-							.addGap(5)
-							.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-							.addGap(5)
-							.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
-							.addGap(31)
-							.addComponent(btnTestButton)))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
+		
 		
 		cardList = new JList();
 		cardList.setToolTipText("highlighted card is currently displayed card");
@@ -253,7 +201,51 @@ public class GameView extends JFrame implements Runnable{
 		txtpnListOfCards.setText("List of Cards in Your Deck");
 		txtpnListOfCards.setBounds(10, 11, 110, 49);
 		deckPanel.add(txtpnListOfCards);
-						
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(10)
+					.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+					.addGap(6)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
+						.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
+						.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnTestButton))
+					.addGap(14)
+					.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE)
+					.addGap(4)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(infoBox)
+						.addComponent(consoleScrollPane, GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(6)
+							.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 323, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(66)
+							.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+							.addGap(31)
+							.addComponent(btnTestButton))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(6)
+							.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(28)
+							.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+							.addGap(14)
+							.addComponent(consoleScrollPane, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)))
+					.addGap(6))
+		);
 		contentPane.setLayout(gl_contentPane);
 		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);//launched maximized
 		
@@ -261,6 +253,7 @@ public class GameView extends JFrame implements Runnable{
 		 * fun little thread that flashes the human player's boarder yet every half second
 		 */
 		Thread flasher = new Thread(){//thread that flashes yellow border every 500ms
+			@Override
 			public void run(){//start run
 				boolean toggle = true;//On - Off
 				Border base = markers[model.getpList().getHumNum()].getBorder(); //Establishes the human player normal boarder
@@ -297,23 +290,15 @@ public class GameView extends JFrame implements Runnable{
 		drawBtn.addActionListener(listener);//draw card button
 		cardLabel.addMouseListener(listener);//mouse listener to cycle through card deck
 	}
-	
+
 	/**
-	 * returns the moveBox JList so that it can be updated by controller
-	 * @return JList moveBox
+	 * updates the move list box
+	 * @param s
 	 */
-	public JList getMoveList(){
-		return  moveBox;
+	@SuppressWarnings("unchecked")
+	public void setMoveList(String[] s){
+		moveBox.setListData(s);
 	}
-	
-	/**
-	 * returns the scrolling console box. text should be appended
-	 * @return JTextArea of the scrolling console
-	 */
-	public JTextArea getGameConsole(){
-		return consoleBox;
-	}
-	
 	/**
 	 * checks if moveList has a selection, and toggles moveBtn accordingly
 	 */
@@ -324,20 +309,36 @@ public class GameView extends JFrame implements Runnable{
 			moveBtn.setEnabled(true);//enable the button
 		}
 	}
-
-
-	/**
-	 * disable moveBox selection
-	 */
-	public void disableMoveBox(){
-		moveBox.setEnabled(false); 
-	}
 	
 	/**
-	 * enable moveBox selection
+	 * Enables/Disables the moveBox 
+	 * @param b enabled/disable value
+	 * True = On
+	 * False = Off
 	 */
-	public void enableMoveBox(){
-		moveBox.setEnabled(true); 
+	public void setMoveBoxStatus(Boolean b){
+		moveBox.setEnabled(b);
+	}
+
+	/**
+	 * Sets the status of the move button
+	 * @param b boolean of the enabled value
+	 * 
+	 * True = On
+	 * False = Off
+	 */
+	public void setMoveButtonStatus(Boolean b){
+		moveBtn.setEnabled(b);
+	}
+
+	/**
+	 * Sets the status of the move button
+	 * @param b boolean of the enabled value
+	 * True = On
+	 * False = Off
+	 */
+	public void setPlayButtonStatus(Boolean b){
+		pCardBtn.setEnabled(b);
 	}
 	
 	/**
@@ -365,35 +366,37 @@ public class GameView extends JFrame implements Runnable{
 	}
 	
 
-	
+	/**
+	 * redraws the deck and the hand list
+	 * @param h The hand to redraw
+	 */
 	@SuppressWarnings("unchecked")
 	public void refreshCards(Hand h){
-		Card tCard  = h.get(currentCard);
-		while(tCard == null){
-			currentCard++;
-			if (currentCard == h.getSize()){
-				currentCard = 0;
-			}
-			tCard  = h.get(currentCard);
-		}
-		
-		ImageIcon icon = h.get(currentCard).getImg();
-		cardLabel.setIcon(icon);
-		HandList tempCList = new HandList(h);
-		cardList.setListData(tempCList.getNames());
-		cardList.setSelectedIndex(currentCard);
+		if(currentCard >= h.getSize()) currentCard = 0;//check for array bounds
+		ImageIcon icon = h.get(currentCard).getImg();//gets the new image
+		cardLabel.setIcon(icon);//set the icon to image
+		cardList.setListData(h.getCardNames());// loads card names from a vector
+		cardList.setSelectedIndex(currentCard);//updates view's currentCard
 		System.out.println("Displaying card " + h.get(currentCard).getName() +
-				" " + h.get(currentCard).getClass().toString());
+				" " + h.get(currentCard).getClass().toString());//prints to screen
 	}
 	
+	/**
+	 * causes the deck of cards to cycle to next card
+	 * @param h hand to cylce through
+	 */
 	public void cycleCards(Hand h){
 		currentCard++;
-		if (currentCard == h.getSize()){
+		if (currentCard >= h.getSize()){
 			currentCard = 0;
 		}
 		refreshCards(h);
 	}
 	
+	/**
+	 * returns index of current card 0-7
+	 * @return int of the index
+	 */
 	public int getCurrentCard(){
 		return currentCard;
 	}
@@ -402,17 +405,16 @@ public class GameView extends JFrame implements Runnable{
 	 * Enables / Disables the draw button depending on Boolean given
 	 * @param b True enables, false disables
 	 */
-	public void toggleDraw(Boolean b){
+	public void setDrawButtonStatus(Boolean b){
 		drawBtn.setEnabled(b);
 	}
 	
+	/**
+	 * sets the current tracking index
+	 * @param i
+	 */
 	public void setCurrentCard(int i){
 		currentCard = i;
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
 }//end class

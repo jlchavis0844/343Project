@@ -22,5 +22,14 @@ public class Card40 extends Card {
 		//lose 1 card
 		p.changeQP(-2);
 	}
+
+	/* (non-Javadoc)
+	 * @see termProject.Card#play(termProject.Player)
+	 */
+	@Override
+	public CardAction play(Player p) {
+		// TODO Auto-generated method stub
+		return CardAction.NONE;
+	}
 	
 }

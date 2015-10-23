@@ -35,7 +35,7 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 	 * @return
 	 */
 	private Card getCurrentCard(){
-		return model.getpList().getHuman().getHand().get(view.getCurrentCard());
+		return getHuman().getHand().get(view.getCurrentCard());
 	}
 
 	/**
@@ -55,36 +55,57 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			System.out.println(e.getActionCommand());
 			moveCurrentPlayer();
 			if(model.getpList().getCurrent().getMoveCount() == 3){
-				view.disableMoveBox();
+				//view.disableMoveBox();
+				view.setMoveBoxStatus(false);
 			}	
 		} else if(e.getActionCommand() == "Play Card"){//if play card button is triggered
 			System.out.println(e.getActionCommand());
 			Player currentPlayer = getHuman();
 			System.out.println(currentPlayer.getPName() + " plays ''" + getCurrentCard().getName() + "''" );
+			CardAction message = getCurrentCard().play(getHuman());//plays the card with the human
+			
+			switch (message){
+				case DISCARD:
+					//launch discard picker
+					break;
+					
+				case DRAW:
+					//draw a another random card
+					model.drawCard(getHuman().getHand());//draw a new card
+					//launch discard picker
+					break;
+					
+				case PICK:
+					new ChipPicker(getHuman());//launch chip picker dialog
+					break;
+					
+				default:
+					System.out.println(message);
+					break;
+			
+			}
+
 			getHuman().getHand().discard(getCurrentCard(), model.getDiscardDeck());
-			//model.playCard(currentPlayer, getCurrentCard());
 			view.refreshCards(getHuman().getHand());
 			model.updateInfo(view.getInfoBox());
 			if(getHuman().getHand().isFull() || model.getLiveDeck().getSize() == 0){
-				view.toggleDraw(false);
+				view.setDrawButtonStatus(false);
 			} else {
-				view.toggleDraw(true);
+				view.setDrawButtonStatus(true);
 			}
 			refreshPlayer();
 			
 		} else if(e.getActionCommand() == "Draw New Card"){//if draw new card button is triggered
 			System.out.println(e.getActionCommand());
+			view.setMoveBoxStatus(true);
+			view.setPlayButtonStatus(true);
 			model.drawCard(getHuman().getHand());
 			view.setCurrentCard(getHuman().getHand().getLastAdded());//sets the recently added card to the current card
 			view.refreshCards(getHuman().getHand());
 			model.updateInfo(view.getInfoBox());
-			if(getHuman().getHand().isFull() || model.getLiveDeck().getSize() == 0){
-				view.toggleDraw(false);
-			}
-			//System.out.println(view.chipPicker());
-		} else {
-			System.out.println("Something went wrong");//error case?
+			view.setDrawButtonStatus(false);
 		}
+			
 	}//end Action Event Listener
 
 	/**
@@ -108,10 +129,9 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 	 * if the moveBtn in the view class is clicked, this method will move the current player into whatever room is selected
 	 * </p>
 	 */
-	@SuppressWarnings("unchecked")
 	private void moveCurrentPlayer(){
 		model.getpList().movePlayer(model.getpList().getHuman(), selectedRoom);//call the movePlayer for the current player and selected room
-		view.getMoveList().setListData(model.getrList().getNeighborNames(selectedRoom));//update the move list
+		view.setMoveList(model.getrList().getNeighborNames(selectedRoom));//update the move list
 		String message = "Moving " + model.getpList().getHuman().getPName() + " to " + selectedRoom.getRoomName();
 		view.toConsole(message);
 		view.setMoveBoxStatus();//refresh moveBtn status	
@@ -124,7 +144,8 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 	private void refreshPlayer(){
 		view.toConsole(model.getpList().getCurrent().getPName() + " plays card " + getCurrentCard().getName());
 		model.getpList().setNextPlayer();//get the next player
-		view.enableMoveBox();//turn the move button on
+		//view.enableMoveBox();//turn the move button on
+		view.setMoveBoxStatus(true);//
 		startAITurns();//start the AI run of turns
 	}
 	
@@ -140,7 +161,14 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			}
 		}
 		model.updateInfo(view.getInfoBox());
+		startHumanTurn();
 		
+	}
+	
+	private void startHumanTurn(){
+		view.setMoveButtonStatus(false);
+		view.setPlayButtonStatus(false);
+		view.setMoveBoxStatus(false);
 	}
 	
 	

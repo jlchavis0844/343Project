@@ -21,5 +21,14 @@ public class Card2 extends Card {
 	public void fail(Player p) {
 		p.changeQP(-2);
 	}
+
+	/* (non-Javadoc)
+	 * @see termProject.Card#play(termProject.Player)
+	 */
+	@Override
+	public CardAction play(Player p) {
+		// TODO Auto-generated method stub
+		return CardAction.NONE;
+	}
 	
 }

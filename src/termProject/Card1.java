@@ -3,6 +3,7 @@ package termProject;
 import javax.swing.ImageIcon;
 
 public class Card1 extends Card {
+	CardAction message;
 	
 	public Card1() {
 		super("Meet the Dean",//name
@@ -15,13 +16,30 @@ public class Card1 extends Card {
 	@Override
 	public void rewards(Player p) {
 		p.changeQP(5);
+		message = CardAction.DRAW;
 		//draw extra game card
 	}
 
 	@Override
 	public void fail(Player p) {
 		p.changeQP(-2);
+		message = CardAction.DISCARD;
 		//discard 1 game card
+	}
+
+	/**
+	 * play function
+	 */
+	@Override
+	public CardAction play(Player p) {
+		
+		if(p.getRNumLocation() != 12 && p.getRNumLocation() != 15){
+			fail(p);
+		} else if(p.getLearning() != 3 || p.getCraft() != 3 || p.getIntegrity() != 3){
+			fail(p);
+		} else rewards(p);
+		
+		return message;
 	}
 	
 }

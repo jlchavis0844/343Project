@@ -1,5 +1,7 @@
 package termProject;
 
+import java.util.Vector;
+
 /**
  * holds the cards of the player
  * @author James
@@ -64,5 +66,19 @@ public class Hand extends Deck{
 	 */
 	public boolean isFull(){
 		return cardList.size() >= 7;
+	}
+	
+	/**
+	 * return a string vector of the card names
+	 * @return Vector<String> of card names
+	 */
+	public Vector<String> getCardNames(){
+		Vector<String> myVec = new Vector<>();
+		
+		for (Card c: cardList){//go through the entire deck
+			myVec.add(c.getName());//push name to vector
+		}
+		return myVec;
+		
 	}
 }

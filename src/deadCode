@@ -1,7 +1,22 @@
-package termProject;
+		super(new JFrame("Chip Picker"),true);
+		System.out.println("Creating chip picker");
+		setLocation(400,400);
+		
+		JPanel messagePane = new JPanel();
+		messagePane.add(new JLabel("Choose a Chip"));
+		getContentPane().add(messagePane);
+		
+		JPanel buttonPane = new JPanel();
+		JButton learnButton = new JButton();
+		buttonPane.add(learnButton);
+		
+		
+		
+		/*******************Handlist************************************
+		package termProject;
 
 import java.util.Vector;
-
+//@TODO: move to hand class
 /**
  * Builds a vector of strings of card names for a LJist to use
  * @author James
@@ -36,3 +51,5 @@ public class HandList {
 		return nameVec;
 	}
 }
+		
+		******************end hand list****************************************

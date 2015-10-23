@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 public class Card9 extends Card {
 	
 	public Card9() {
-		super("Professor's Murgolo's CECS 174 Class",
+		super("Professor Murgolo's CECS 174 Class",
 				new int[]{0,0,0},//learning, craft, integrity
 				new int[]{14},//rooms you can play the card in
 				1,//year that the cards belong to
@@ -14,13 +14,21 @@ public class Card9 extends Card {
 
 	@Override
 	public void rewards(Player p) {
-		//p.changeQP(10);
+		p.changeLearning(1);
 	}
 
 	@Override
 	public void fail(Player p) {
-		//lose 1 card
 		p.changeQP(-2);
+	}
+
+	/* (non-Javadoc)
+	 * @see termProject.Card#play(termProject.Player)
+	 */
+	@Override
+	public CardAction play(Player p) {
+		// TODO Auto-generated method stub
+		return CardAction.NONE;
 	}
 	
 }
