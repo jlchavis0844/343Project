@@ -14,8 +14,7 @@ public class Card3 extends Card {
 
 	@Override
 	public void rewards(Player p) {
-		//choose chip
-		//p.changeQP(1);
+		p.changeQP(1);
 	}
 
 	@Override
@@ -23,13 +22,14 @@ public class Card3 extends Card {
 		p.changeQP(-2);
 	}
 
-	/* (non-Javadoc)
-	 * @see termProject.Card#play(termProject.Player)
-	 */
-	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation())){
+			rewards(p);
+			return CardAction.PICK;
+		} else {
+			fail(p);
+			return CardAction.NONE;
+		}
 	}
 	
 }

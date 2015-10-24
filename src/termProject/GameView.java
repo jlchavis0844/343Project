@@ -170,9 +170,14 @@ public class GameView extends JFrame{
 		btnTestButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				ChipPicker cp = new ChipPicker(model.getpList().getHuman());
+				/*ChipPicker cp = new ChipPicker(model.getpList().getHuman());
 				model.updateInfo(infoBox);
-				toConsole(cp.getChoiceStr());
+				toConsole(cp.getChoiceStr());*/
+
+				DiscardDiag dis = new DiscardDiag(model.getpList().getHuman(), model.getDiscardDeck());
+				model.updateInfo(infoBox);
+				toConsole(dis.getMessage());
+				refreshCards(model.getpList().getHuman().getHand());
 			}
 		});
 		

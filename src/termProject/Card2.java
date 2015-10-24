@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 
 public class Card2 extends Card {
 	
+
 	public Card2() {
 		super("CECS 100",
 				new int[]{},//learning, craft, integrity
@@ -15,6 +16,7 @@ public class Card2 extends Card {
 	@Override
 	public void rewards(Player p) {
 		p.changeQP(1);
+		p.changeLearning(1);
 	}
 
 	@Override
@@ -22,13 +24,12 @@ public class Card2 extends Card {
 		p.changeQP(-2);
 	}
 
-	/* (non-Javadoc)
-	 * @see termProject.Card#play(termProject.Player)
-	 */
-	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
+		
+		if(p.getRNumLocation() != 14 && p.getRNumLocation() != 17){
+			fail(p);
+		} else rewards(p);
 		return CardAction.NONE;
 	}
-	
 }
+	

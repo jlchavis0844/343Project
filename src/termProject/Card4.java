@@ -28,8 +28,13 @@ public class Card4 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			return CardAction.NONE;
+		} else {
+			fail(p);
+			return CardAction.DISCARD;
+		}
 	}
 	
 }

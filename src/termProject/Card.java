@@ -110,9 +110,43 @@ public abstract class Card {
 	
 	/**
 	 * causes the playing of the card and other stuff
+	 * <p>
+	 * Should be implemented with the check of 
+	 * if(roomCheck(p.getRNumLocation()) && prereqCheck(p)) rewards();.
+	 * If both return true, then both checks passed
+	 * else, call fail() method.
+	 * The CardAction should return any reward or failure outside of QP +/-
+	 * or specific chip deduction (anything not in ChipAction)
+	 * </p>
 	 * @param p the player playing the card
 	 * @return if any card action is to be taken
 	 */
 	public abstract CardAction play(Player p);
 	
+	/**
+	 * Checks to see if the given index is in the prereqRooms array
+	 * @param i the index to look for
+	 * @return if found, returns true, false otherwise
+	 */
+	public boolean roomCheck(int i){
+		for (int j: prereqRoom){
+			if(j == i){
+				return true;//found
+			}
+		}
+		return false;//not found
+	}
+	
+	/**
+	 * checks if player has chips/skills to play the card
+	 * @param p Player to check
+	 * @return whether the test was passed
+	 */
+	public boolean prereqCheck(Player p){
+		if (p.getLearning() < prereqSkill[Chips.LEARNING.ordinal()] ||
+			p.getCraft() < prereqSkill[Chips.CRAFTING.ordinal()] ||
+			p.getIntegrity() < prereqSkill[Chips.INTEGRITY.ordinal()]){
+			return false;
+		} else return true;
+	}
 }

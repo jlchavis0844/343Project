@@ -169,7 +169,7 @@ public class GameModel {
 	 */
 	public void loadRound1(Deck d){
 	//round 1 will be the first 4 cards (0-3) for test purposes
-		int key = 30; //easier to change later
+		int key = 40; //easier to change later
 		for (int i = 0; i < key; i++){
 			d.addCard(masterDeck.get(i));//add index i to Deck d
 		}

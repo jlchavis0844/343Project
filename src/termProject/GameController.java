@@ -66,7 +66,10 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			
 			switch (message){
 				case DISCARD:
-					//launch discard picker
+					DiscardDiag dis = new DiscardDiag(model.getpList().getHuman(), model.getDiscardDeck());
+					model.updateInfo(view.getInfoBox());
+					view.toConsole(dis.getMessage());
+					view.refreshCards(model.getpList().getHuman().getHand());
 					break;
 					
 				case DRAW:
