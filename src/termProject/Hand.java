@@ -46,11 +46,7 @@ public class Hand extends Deck{
 		}
 		return tBool;//return whether the card 
 	}
-
-	@Override
-	public Card get(int i){
-		return cardList.get(i);
-	}
+	
 	
 	/**
 	 * returns the index location of the last added card

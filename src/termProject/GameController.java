@@ -79,9 +79,14 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 					break;
 					
 				case PICK:
-					new ChipPicker(getHuman());//launch chip picker dialog
+					message.getExcluded();
+					new ChipPicker(getHuman(),message.getExcluded());//launch chip picker dialog
 					break;
 					
+				case TELEPORT:
+					model.getpList().movePlayer(model.getpList().getCurrent(),
+							model.getrList().find(model.getpList().getCurrent().getRNumLocation()));
+					break;
 				default:
 					System.out.println(message);
 					break;
@@ -96,17 +101,19 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			} else {
 				view.setDrawButtonStatus(true);
 			}
-			refreshPlayer();
+			endHumanTurn();
 			
 		} else if(e.getActionCommand() == "Draw New Card"){//if draw new card button is triggered
-			System.out.println(e.getActionCommand());
-			view.setMoveBoxStatus(true);
-			view.setPlayButtonStatus(true);
-			model.drawCard(getHuman().getHand());
+			System.out.println(e.getActionCommand());//debugging
+			view.setMoveBoxStatus(true);//enable room list
+			view.setPlayButtonStatus(true);//enabled playcard button
+			model.drawCard(getHuman().getHand());//draws the card from live deck, adds to hand
 			view.setCurrentCard(getHuman().getHand().getLastAdded());//sets the recently added card to the current card
-			view.refreshCards(getHuman().getHand());
-			model.updateInfo(view.getInfoBox());
-			view.setDrawButtonStatus(false);
+			view.refreshCards(getHuman().getHand());//redraws deck to screen
+			model.updateInfo(view.getInfoBox());//refresh info box w/ player stats
+			int cardIndex = getHuman().getHand().getLastAdded();//temp use for last added function
+			view.toConsole(getHuman().getPName()+" draws "+getHuman().getHand().get(cardIndex).getName());
+			view.setDrawButtonStatus(false);//disables draw card button, only 1 per turn
 		}
 			
 	}//end Action Event Listener
@@ -144,7 +151,7 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 	 * Resets the player's moveCount after turn.
 	 * Sets the next player in pList as current and refreshes moveBox 
 	 */
-	private void refreshPlayer(){
+	private void endHumanTurn(){
 		view.toConsole(model.getpList().getCurrent().getPName() + " plays card " + getCurrentCard().getName());
 		model.getpList().setNextPlayer();//get the next player
 		//view.enableMoveBox();//turn the move button on
@@ -164,11 +171,15 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			}
 		}
 		model.updateInfo(view.getInfoBox());
-		startHumanTurn();
+		startHumanTurn();//ends AI, starts human term.
 		
 	}
 	
-	private void startHumanTurn(){
+	/**
+	 * Disables buttons for the human turn until
+	 * the human player draws a card
+	 */
+	private void startHumanTurn(){//turn off everything
 		view.setMoveButtonStatus(false);
 		view.setPlayButtonStatus(false);
 		view.setMoveBoxStatus(false);
@@ -187,25 +198,25 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// left blank intentionally
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// left blank intentionally
 		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// left blank intentionally
 		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// left blank intentionally
 		
 	}
 	

@@ -2,14 +2,14 @@ package termProject;
 
 import javax.swing.ImageIcon;
 
-public class Card9 extends Card {
+public class Card08 extends Card {
 	
-	public Card9() {
-		super("Professor Murgolo's CECS 174 Class",
+	public Card08() {
+		super("Research Compilers",
 				new int[]{0,0,0},//learning, craft, integrity
-				new int[]{14},//rooms you can play the card in
+				new int[]{7},//rooms you can play the card in
 				1,//year that the cards belong to
-				new ImageIcon(GameView.class.getResource("/termProject/graphics/card9.png")));		
+				new ImageIcon(GameView.class.getResource("/termProject/graphics/card8.png")));		
 	}
 
 	@Override

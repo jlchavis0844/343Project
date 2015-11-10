@@ -2,9 +2,9 @@ package termProject;
 
 import javax.swing.ImageIcon;
 
-public class Card6 extends Card {
+public class Card06 extends Card {
 	
-	public Card6() {
+	public Card06() {
 		super("Math 122",
 				new int[]{0,0,0},//learning, craft, integrity
 				new int[]{7},//rooms you can play the card in
@@ -27,8 +27,12 @@ public class Card6 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
+		
 		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		CardAction temp = CardAction.PICK;
+		temp.setExcluded("craft");
+		return temp;
+		
 	}
 	
 }

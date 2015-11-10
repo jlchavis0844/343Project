@@ -69,52 +69,118 @@ public class GameModel {
 	}
 	
 	/**
-	 * AI player will either move to a random neighboring room or play card.
-	 * The player can move up to 3 times and must end turn by playing card.
-	 * @return String describing AI movement
+	 * AI player moves to a random neighboring room 0-3 times
+	 * and plays a card.
+	 * @return Vector<String> describing AI choices
 	 */
 	public Vector<String> aiPlay(){
-		Vector<String> consoleMsg = new Vector<String>();
-		String tempStr;
-		int choice;
-		int currentRNum;
-		int numNeighbors;
-		int neighborIndexChoice;
-		int rNumChoice;
-		
-		whileLoop://labels the while loop as 'whileLoop'
-		while(pList.getCurrent().getMoveCount() < 3){
-			choice = random(2);//random number 0-1
-			if(choice == 0){
-				currentRNum = pList.getCurrent().getRNumLocation();//current room number
-				numNeighbors = rList.getNeighborNames(currentRNum).length;//number of neighbors
-				neighborIndexChoice = random(numNeighbors);//random index of neighbors[]
-				rNumChoice = rList.getRoom(currentRNum).getNeighbor(neighborIndexChoice);//chosen room number
-				pList.movePlayer(pList.getCurrent(), rList.getRoom(rNumChoice));//moves the player
-				tempStr = "moving AI player "+pList.getCurrent().getPName() + " to " + rList.getRoom(rNumChoice).getRoomName();//store output message
-				System.out.println(tempStr);//print to console
-				consoleMsg.add(tempStr); //add to string vector
-			}
-			else{
-				tempStr = "AI player "+pList.getCurrent().getPName() + " plays their card";
-				System.out.println(tempStr);//print to console for tracking
-				consoleMsg.add(tempStr);//stores console message
-				//call playCard() method
-				break whileLoop; // exit while loop after game card is played
-			}
-		}//end of whileLoop
-		
-	//TODO: Delete this once AI has been sorted after iteration #1
-		if(pList.getCurrent().getMoveCount() == 3){//playCard() when out of moves
-			tempStr = "AI player "+pList.getCurrent().getPName() + " plays their card";
-			System.out.println(tempStr);//print to console for tracking
-			consoleMsg.add(tempStr);//stores console message
-			//call playCard() method
+		Vector<String> consoleMsg = new Vector<>(); 
+		Player tPlayer = pList.getCurrent(); 
+		int moves = random(4); //how many moves the AI makes
+		switch(moves){
+			case 0:
+				// play card in current room
+				consoleMsg.add(aiPlayCard(tPlayer));
+				break;
+			case 1:
+				consoleMsg.add(moveRandom(tPlayer));
+				consoleMsg.add(aiPlayCard(tPlayer));
+				break;
+			case 2:
+				consoleMsg.add(moveRandom(tPlayer));
+				consoleMsg.add(moveRandom(tPlayer));
+				consoleMsg.add(aiPlayCard(tPlayer));
+				break;
+			case 3:
+				consoleMsg.add(moveRandom(tPlayer));
+				consoleMsg.add(moveRandom(tPlayer));
+				consoleMsg.add(moveRandom(tPlayer));
+				consoleMsg.add(aiPlayCard(tPlayer));
+				break;
 		}
-		pList.setNextPlayer();//advance to next player
-		
+		pList.setNextPlayer();
 		return consoleMsg;
 	}
+	
+	/**
+	 * Iterate through the live deck to find a card
+	 * where the AI room location satisfies the room prerequisite.
+	 * If not found, play the last card in the deck.
+	 * @return String message describing card action
+	 */
+	public String aiPlayCard(Player p){
+		String message; 
+		int currentRoom = p.getRNumLocation(); 
+		Card currentCard = null; 
+		
+		for(int i = 0; i < liveDeck.getCardCount(); i++){ 
+			currentCard = liveDeck.get(i);
+			if(currentCard.roomCheck(currentRoom)){ 
+				break;
+			}
+		}
+		
+		String playCard = currentCard.getName();
+		String aiName = p.getPName();
+		message = "AI player "+aiName+" plays "+playCard+"\n";
+		
+		//CardAction as a result from card play
+		CardAction cAction = currentCard.play(p);	
+		switch (cAction){
+			case DISCARD:
+				Card pCard = liveDeck.get(random(liveDeck.getCardCount()));
+				liveDeck.discard(pCard, discardDeck);
+				message += "AI player "+aiName+" discards "+pCard.getName()+"\n";
+				break;	
+			case DRAW:
+				// nothing happens
+				message += "AI player "+aiName+" draws a card\n";
+				break;	
+			case PICK:
+				int choice = random(3);	
+				if(choice == 0){ 
+					p.changeIntegrity(1);
+					message += "AI player "+aiName+" chooses Integrity Chip\n";
+				}
+				else if(choice == 1){
+					p.changeCraft(1);
+					message += "AI player "+aiName+" chooses Craft Chip\n";
+				}
+				else{ 
+					p.changeLearning(1);
+					message += "AI player "+aiName+" chooses Learning Chip\n";
+				}
+				break;
+			case TELEPORT:
+				Room tRoom = rList.find(p.getRNumLocation());
+				pList.movePlayer(p, tRoom);
+				message += "AI player " +aiName+" teleports to "+tRoom.getRoomName() + "\n";
+				break;
+			default:
+				System.out.println("");
+				break;
+		}
+		
+		return message;
+	}
+	
+	/**
+	 * Move player to a random neighboring room
+	 * @param p
+	 * @return String describing AI movement
+	 */
+	public String moveRandom(Player p){
+		int rIndex = p.getRNumLocation(); //room number of current room location
+		String neighbors[] = rList.getNeighborNames(rIndex); //String array of neighbors list
+		rIndex = random(neighbors.length); //random index of neighbor array
+		Room tRoom = rList.find(neighbors[rIndex]); //save selected room
+		p.move(tRoom.getRoomNum()); //move player to the selected room
+		
+		String message;
+		message = "AI player "+p.getPName()+" moves to "+tRoom.getRoomName();
+		return message;
+	}
+	
 	
 	/**
 	 * generate a random integer from 0 to (length-1)
@@ -180,15 +246,15 @@ public class GameModel {
 	 * @param md masterdeck to load into
 	 */
 	private void makeMasterDeck(ArrayList<Card> md){
-		md.add(new Card1());
-		md.add(new Card2());
-		md.add(new Card3());
-		md.add(new Card4());
-		md.add(new Card5());
-		md.add(new Card6());
-		md.add(new Card7());
-		md.add(new Card8());
-		md.add(new Card9());
+		md.add(new Card01());
+		md.add(new Card02());
+		md.add(new Card03());
+		md.add(new Card04());
+		md.add(new Card05());
+		md.add(new Card06());
+		md.add(new Card07());
+		md.add(new Card08());
+		md.add(new Card09());
 		md.add(new Card10());
 		md.add(new Card11());
 		md.add(new Card12());
@@ -245,17 +311,32 @@ public class GameModel {
 		
 	}
 	
+	/**
+	 * get the deck of discarded cards
+	 * 
+	 */
 	public Deck getDiscardDeck(){
 		return discardDeck;
 	}
 	
-	
+	/**
+	 * places the top card into given hand
+	 * @param h hand to place the card in
+	 */
 	public void drawCard(Hand h){
 		Card tempCard = liveDeck.get(random(liveDeck.getSize()));
 		liveDeck.discard(tempCard, h);
 	}
 	
+	/**
+	 * returns the deck of currently available cards
+	 * @return
+	 */
 	public Deck getLiveDeck(){
 		return liveDeck;
+	}
+	
+	public ArrayList<Card> getMasterDeck(){
+		return masterDeck;
 	}
 }

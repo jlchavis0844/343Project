@@ -1,5 +1,7 @@
 package termProject;
 import java.util.ArrayList;
+import java.util.Random;
+
 import termProject.Card;
 
 /**
@@ -73,5 +75,25 @@ public class Deck {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * shuffles the current cards in the current
+	 * 
+	 * <p>
+	 * creates a temp ArrayList and loads a random 
+	 * card into it until current cardList is empty,
+	 * temp ArrayList then over-writes cardList 
+	 * </p>
+	 */
+	public void shuffle(){
+		ArrayList<Card> tList = new ArrayList<>();//temp ArrayList
+		
+		while (!cardList.isEmpty()){//while the current cardList is not empty
+			//remove from card list and place into temp list
+			tList.add(cardList.remove(new Random().nextInt(cardList.size())));
+		}
+		
+		cardList = tList;//over write the cardList (current) with temp (new, shuffled)
 	}
 }

@@ -21,12 +21,15 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+import com.sun.javafx.geom.Rectangle;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Vector;
 
 /**
  * JPanel constructor used to draw game board and run most game functions
@@ -158,7 +161,7 @@ public class GameView extends JFrame{
 		deckPanel.setLayout(null);
 		
 		//creates a label to display the card being played
-		cardLabel = new JLabel("New label");
+		cardLabel = new JLabel("Image Not Found");
 		cardLabel.setToolTipText("Click to cylce cards");
 		cardLabel.setBounds(129, 62, 207, 275);
 		deckPanel.add(cardLabel);
@@ -174,10 +177,15 @@ public class GameView extends JFrame{
 				model.updateInfo(infoBox);
 				toConsole(cp.getChoiceStr());*/
 
-				DiscardDiag dis = new DiscardDiag(model.getpList().getHuman(), model.getDiscardDeck());
+				/*DiscardDiag dis = new DiscardDiag(model.getpList().getHuman(), model.getDiscardDeck());
 				model.updateInfo(infoBox);
 				toConsole(dis.getMessage());
-				refreshCards(model.getpList().getHuman().getHand());
+				refreshCards(model.getpList().getHuman().getHand());*/
+				
+				Player hPlayer = model.getpList().getHuman();
+				CardAction message = model.getMasterDeck().get(5).play(hPlayer);
+				new ChipPicker(hPlayer,message.getExcluded());//launch chip picker dialog
+				
 			}
 		});
 		
@@ -192,7 +200,7 @@ public class GameView extends JFrame{
 		cardList.setSelectionMode(0);
 		deckPanel.add(cardList);
 		
-		deckTitle = new JLabel("Your Deck of Cards");
+		deckTitle = new JLabel("Your Hand of Cards");
 		deckTitle.setFont(new Font("Tahoma", Font.BOLD, 16));
 		deckTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		deckTitle.setLabelFor(cardLabel);
@@ -203,7 +211,7 @@ public class GameView extends JFrame{
 		txtpnListOfCards.setFont(new Font("Tahoma", Font.BOLD, 16));
 		txtpnListOfCards.setBackground(SystemColor.menu);
 		txtpnListOfCards.setLineWrap(true);
-		txtpnListOfCards.setText("List of Cards in Your Deck");
+		txtpnListOfCards.setText("List of Cards in Your Hand");
 		txtpnListOfCards.setBounds(10, 11, 110, 49);
 		deckPanel.add(txtpnListOfCards);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -377,13 +385,19 @@ public class GameView extends JFrame{
 	 */
 	@SuppressWarnings("unchecked")
 	public void refreshCards(Hand h){
-		if(currentCard >= h.getSize()) currentCard = 0;//check for array bounds
-		ImageIcon icon = h.get(currentCard).getImg();//gets the new image
-		cardLabel.setIcon(icon);//set the icon to image
-		cardList.setListData(h.getCardNames());// loads card names from a vector
-		cardList.setSelectedIndex(currentCard);//updates view's currentCard
-		System.out.println("Displaying card " + h.get(currentCard).getName() +
-				" " + h.get(currentCard).getClass().toString());//prints to screen
+		if(h.getSize() == 0){
+			cardLabel.setIcon(null);//load default image
+			cardList.setListData(new String[]{"Empty Hand"});
+		}
+		else{
+			if(currentCard >= h.getSize())currentCard = 0;//check for array bounds
+			cardLabel.setIcon(h.get(currentCard).getImg());//set the icon to image
+			cardList.setListData(h.getCardNames());// loads card names from a vector
+			cardList.setSelectedIndex(currentCard);//updates view's currentCard
+			System.out.println("Displaying card " + h.get(currentCard).getName() +
+					" " + h.get(currentCard).getClass().toString());//prints to screen
+		}
+		
 	}
 	
 	/**

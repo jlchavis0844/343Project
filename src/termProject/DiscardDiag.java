@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
-import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.GridLayout;
 
@@ -23,10 +22,10 @@ public class DiscardDiag extends JFrame{
 	JDialog d1;//the dialog component
 	DiagListener listener;//the listener for the 3 buttons
 	Player tempPlayer;//the player that is picking
-	boolean picked;//whether or not a chip has been picked
+	boolean picked;//whether or not a card has been picked
 	Vector<JButton> btnVec; //holds all the buttons
-	Deck discardDeck;
-	String message;
+	Deck discardDeck; //where the discarded card goes
+	String message; //any return message
 	
 /**
  * The constructor for the dialog
@@ -48,7 +47,7 @@ public class DiscardDiag extends JFrame{
 	        // Set size
 	        int handSize = p.getHand().getSize();
 	        d1.setSize(handSize*210,400);
-	        setSize(handSize*210,400);
+	       // setSize(handSize*210,400);
 	        //absolute layout for Frame
 	        getContentPane().setLayout(null);
 	        d1.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));//grid layout for the dialog
@@ -57,11 +56,13 @@ public class DiscardDiag extends JFrame{
 	        panel.setLayout(null);//absolute layout
 	        d1.getContentPane().add(panel);//add components
 	        
-	        btnVec = new Vector<>(); 
-	        Card tCard;
+	        btnVec = new Vector<>(); //holds all the buttons to add to panel
+	        Card tCard;//temp card object
 	        for(int i =0; i < handSize; i++){//for as many cards that are in the hand
 	        	tCard = p.getHand().get(i);//holds this card
+	        	String name = tCard.getName();
 	        	btnVec.add(new JButton(tCard.getName()));//make new button
+	        	btnVec.get(i).setName(name);
 	        	btnVec.get(i).setIcon(tCard.getImg());// set card icon
 	        	btnVec.get(i).setBounds(20+i*200,20,200,270);//place the card
 	        	btnVec.get(i).addActionListener(listener);//add an action listener
@@ -98,9 +99,10 @@ public class DiscardDiag extends JFrame{
 	      @Override
 		public void actionPerformed(ActionEvent e) {
 	    	  int index = -1;
-	    	  JButton tButton = (JButton)e.getSource();
+	    	  String eName =  e.getActionCommand();
+	    	  System.out.println(eName);
 	    	  for(int i = 0; i < btnVec.size(); i++){
-	    		  if(btnVec.get(i).equals(tButton)){
+	    		  if(btnVec.get(i).getName() == eName){
 	    			  index = i;
 	    			  break;
 	    		  }
@@ -109,11 +111,12 @@ public class DiscardDiag extends JFrame{
 	    		  System.err.println("Card not found");
 	    	  } else {
 	    	  picked = true;
+	    	  message =tempPlayer.getPName() + " discards \""
+	        		  +tempPlayer.getHand().get(index).getName()+ "\"";
 	    	  tempPlayer.getHand().discard(tempPlayer.getHand().get(index),discardDeck);
 	    	  setVisible(false);//hide
     		  dispose();//close
-    		  message =tempPlayer.getPName() + " discards \""
-    		  +tempPlayer.getHand().get(index).getName()+ "\"";
+    		  
 	    	  }
 	      }
 	}

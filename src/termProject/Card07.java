@@ -2,9 +2,9 @@ package termProject;
 
 import javax.swing.ImageIcon;
 
-public class Card7 extends Card {
+public class Card07 extends Card {
 	
-	public Card7() {
+	public Card07() {
 		super("Lunch at Bratwurst Hall",
 				new int[]{0,0,0},//learning, craft, integrity
 				new int[]{9},//rooms you can play the card in

@@ -2,10 +2,10 @@ package termProject;
 
 import javax.swing.ImageIcon;
 
-public class Card1 extends Card {
+public class Card01 extends Card {
 	CardAction message;
 	
-	public Card1() {
+	public Card01() {
 		super("Meet the Dean",//name
 				new int[]{3,3,3},//learning, craft, integrity
 				new int[]{12,15},//rooms you can play the card in

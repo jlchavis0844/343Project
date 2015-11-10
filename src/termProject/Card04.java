@@ -2,9 +2,9 @@ package termProject;
 
 import javax.swing.ImageIcon;
 
-public class Card4 extends Card {
+public class Card04 extends Card {
 	
-	public Card4() {
+	public Card04() {
 		super("Goodbye, Professor",
 				new int[]{6,6,6},//learning, craft, integrity
 				new int[]{13},//rooms you can play the card in
@@ -30,11 +30,14 @@ public class Card4 extends Card {
 	public CardAction play(Player p) {
 		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
 			rewards(p);
+			//p.setRNumLocation(3);
 			return CardAction.NONE;
 		} else {
 			fail(p);
 			return CardAction.DISCARD;
 		}
+		
+		
 	}
 	
 }

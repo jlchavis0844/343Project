@@ -70,6 +70,9 @@ public abstract class Player {
 	 */
 	public void changeQP(int qp){
 		this.qp += qp;
+		if(this.qp < 0){
+			this.qp = 0;
+		}
 	}
 	
 	/**

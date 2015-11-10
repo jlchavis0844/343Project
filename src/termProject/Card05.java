@@ -2,20 +2,18 @@ package termProject;
 
 import javax.swing.ImageIcon;
 
-public class Card2 extends Card {
+public class Card05 extends Card {
 	
-
-	public Card2() {
-		super("CECS 100",
-				new int[]{},//learning, craft, integrity
+	public Card05() {
+		super("CECS 105",
+				new int[]{0,0,0},//learning, craft, integrity
 				new int[]{14,17},//rooms you can play the card in
 				1,//year that the cards belong to
-				new ImageIcon(GameView.class.getResource("/termProject/graphics/card2.png")));		
+				new ImageIcon(GameView.class.getResource("/termProject/graphics/card5.png")));		
 	}
 
 	@Override
 	public void rewards(Player p) {
-		p.changeQP(1);
 		p.changeLearning(1);
 	}
 
@@ -24,12 +22,13 @@ public class Card2 extends Card {
 		p.changeQP(-2);
 	}
 
+	/* (non-Javadoc)
+	 * @see termProject.Card#play(termProject.Player)
+	 */
+	@Override
 	public CardAction play(Player p) {
-		
-		if(p.getRNumLocation() != 14 && p.getRNumLocation() != 17){
-			fail(p);
-		} else rewards(p);
+		// TODO Auto-generated method stub
 		return CardAction.NONE;
 	}
-}
 	
+}
