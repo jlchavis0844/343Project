@@ -25,7 +25,7 @@ public class RoomList {
 		rList[3]  = new Room(420, 270, "The Pyramid",3);
 		rList[3].addNeighbor(new int[]{0,1,2});
 		rList[4]  = new Room(40, 750, "West Walkway",4);
-		rList[4].addNeighbor(new int[]{5,12,7});
+		rList[4].addNeighbor(new int[]{5,12,0,7});
 		rList[5]  = new Room(450, 565,"Rec Center",5);
 		rList[5].addNeighbor(new int[]{4,3,0,6});
 		rList[6]  = new Room(1045, 585,"Forbidden Parking",6);
@@ -56,7 +56,7 @@ public class RoomList {
 		rList[18].addNeighbor(new int[]{15});
 		rList[19]  = new Room(1240, 870, "Conference Room",19);
 		rList[19].addNeighbor(new int[]{15});
-		rList[20]  = new Room(1200, 1390, "Lactation Lounge",20);
+		rList[20]  = new Room(1200, 1390, "Milk Bar",20);
 		rList[20].addNeighbor(new int[]{15});
 	}
 	

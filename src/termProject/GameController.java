@@ -28,6 +28,7 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 	public GameController(GameModel m, GameView v){
 		model = m;//assigns the model class
 		view = v;// assigns the view class
+		startHumanTurn();//sets default start condition for human turn
 	}
 	
 	/**
@@ -63,19 +64,35 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			Player currentPlayer = getHuman();
 			System.out.println(currentPlayer.getPName() + " plays ''" + getCurrentCard().getName() + "''" );
 			CardAction message = getCurrentCard().play(getHuman());//plays the card with the human
-			
+            //************** print card play result to console **************
+			String tCard = getCurrentCard().getName();//current card's name
+			String result = message.getResult();//store result for printing
+			view.toConsole(getHuman().getPName()+" plays card "+tCard+" "+result);//write to view's console
+			getHuman().getHand().discard(getCurrentCard(), model.getDiscardDeck());//discard currentCard
+			//process return cardAction
 			switch (message){
 				case DISCARD:
-					DiscardDiag dis = new DiscardDiag(model.getpList().getHuman(), model.getDiscardDeck());
-					model.updateInfo(view.getInfoBox());
-					view.toConsole(dis.getMessage());
-					view.refreshCards(model.getpList().getHuman().getHand());
+					pickDiscard();//make choice and discard the choice
 					break;
 					
 				case DRAW:
 					//draw a another random card
 					model.drawCard(getHuman().getHand());//draw a new card
-					//launch discard picker
+					//launch discard picker if over 
+					if(getHuman().getHand().getSize() > 7){
+						pickDiscard();
+					}
+					break;
+				
+				case DRAW2:
+					for(int i = 0; i < 2; i++){
+						//draw a another random card
+						model.drawCard(getHuman().getHand());//draw a new card
+						//launch discard picker if over 
+						if(getHuman().getHand().getSize() > 7){
+							pickDiscard();
+						}
+					}
 					break;
 					
 				case PICK:
@@ -83,17 +100,21 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 					new ChipPicker(getHuman(),message.getExcluded());//launch chip picker dialog
 					break;
 					
-				case TELEPORT:
-					model.getpList().movePlayer(model.getpList().getCurrent(),
-							model.getrList().find(model.getpList().getCurrent().getRNumLocation()));
+				case TELEPORT://player room loc set by card, using movePlayer
+					//moves the player using movePlayer to location set in the card
+					Room tRoom = model.getrList().find(getHuman().getRNumLocation());
+					model.getpList().movePlayer(getHuman(),tRoom);
+					view.setMoveList(model.getrList().getNeighborNames(tRoom));
 					break;
+					
 				default:
 					System.out.println(message);
 					break;
 			
 			}
+			
 
-			getHuman().getHand().discard(getCurrentCard(), model.getDiscardDeck());
+			
 			view.refreshCards(getHuman().getHand());
 			model.updateInfo(view.getInfoBox());
 			if(getHuman().getHand().isFull() || model.getLiveDeck().getSize() == 0){
@@ -152,7 +173,7 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 	 * Sets the next player in pList as current and refreshes moveBox 
 	 */
 	private void endHumanTurn(){
-		view.toConsole(model.getpList().getCurrent().getPName() + " plays card " + getCurrentCard().getName());
+		//view.toConsole(model.getpList().getCurrent().getPName() + " plays card " + getCurrentCard().getName()); //moved to actionPerformed
 		model.getpList().setNextPlayer();//get the next player
 		//view.enableMoveBox();//turn the move button on
 		view.setMoveBoxStatus(true);//
@@ -183,6 +204,17 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 		view.setMoveButtonStatus(false);
 		view.setPlayButtonStatus(false);
 		view.setMoveBoxStatus(false);
+		model.checkDeck();
+	}
+	
+	/**
+	 * runs the discard diag for the human to pick the discarded card
+	 */
+	public void pickDiscard(){
+		DiscardDiag dis = new DiscardDiag(model.getpList().getHuman(), model.getDiscardDeck());
+		model.updateInfo(view.getInfoBox());
+		view.toConsole(dis.getMessage());
+		view.refreshCards(model.getpList().getHuman().getHand());
 	}
 	
 	

@@ -13,6 +13,7 @@ public abstract class Card {
 	private int prereqRoom[]; //holds the room prerequisites as room numbers
 	private int year; //year in which the card is played
 	private ImageIcon img; //card image
+	protected CardAction retCA;
 	
 	/**
 	 * Constructor with name, skill prerequisites, room prerequisites, and year
@@ -31,6 +32,7 @@ public abstract class Card {
 		prereqRoom = pr;
 		year = y;
 		img = i;
+		retCA = CardAction.NONE;
 	}
 
 	/**
@@ -129,6 +131,7 @@ public abstract class Card {
 	 * @return if found, returns true, false otherwise
 	 */
 	public boolean roomCheck(int i){
+		if (prereqRoom.length == 0) return true;//if not prereqs
 		for (int j: prereqRoom){
 			if(j == i){
 				return true;//found
@@ -139,10 +142,12 @@ public abstract class Card {
 	
 	/**
 	 * checks if player has chips/skills to play the card
+	 * uses negative logic, if one fails, all fail and return false
 	 * @param p Player to check
 	 * @return whether the test was passed
 	 */
 	public boolean prereqCheck(Player p){
+		
 		if (p.getLearning() < prereqSkill[Chips.LEARNING.ordinal()] ||
 			p.getCraft() < prereqSkill[Chips.CRAFTING.ordinal()] ||
 			p.getIntegrity() < prereqSkill[Chips.INTEGRITY.ordinal()]){

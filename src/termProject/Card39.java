@@ -15,7 +15,6 @@ public class Card39 extends Card {
 	@Override
 	public void rewards(Player p) {
 		p.changeCraft(1);
-		//p.move(20);
 	}
 
 	@Override
@@ -27,9 +26,17 @@ public class Card39 extends Card {
 	 * @see termProject.Card#play(termProject.Player)
 	 */
 	@Override
-	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+	public CardAction play(Player p) {		
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA = CardAction.TELEPORT;
+			retCA.setResult("and gets 1 Craft Chip, and teleports to Milk Bar");
+		} else {
+			fail(p);
+			retCA = CardAction.TELEPORT;
+			retCA.setResult("and fails and teleports to Milk Bar");
+		}
+		p.setRNumLocation(20);//set location to lactation lounge
+		return retCA;
 	}
-	
 }

@@ -81,19 +81,21 @@ public class ChipPicker extends JFrame{
 	        label.setBounds(80, 413, 250, 14);
 	        panel.add(label);
 	        
-	        switch(excluded){
-	        case "craft":
-	        	button_2.setEnabled(false);
-	        	break;
-	        case "learn":
-	        	button_1.setEnabled(false);
-	        	break;
-	        case "integ":
-	        	button.setEnabled(false);
-	        	break;
-	        default:
-	        	if(excluded != null) System.out.println("Error with excluded\n");
-	        	break;
+	        if (excluded != null){
+		        switch(excluded){
+		        case "craft":
+		        	button_2.setEnabled(false);
+		        	break;
+		        case "learn":
+		        	button_1.setEnabled(false);
+		        	break;
+		        case "integ":
+		        	button.setEnabled(false);
+		        	break;
+		        default:
+		        	System.out.println("Error with excluded\n");
+		        	break;
+		        }
 	        }
 	        //fire it up
 	        d1.setVisible(true);

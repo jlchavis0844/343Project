@@ -15,12 +15,13 @@ public class Card16 extends Card {
 	@Override
 	public void rewards(Player p) {
 		p.changeCraft(1);
-		//p.move(20);
+		p.setRNumLocation(20);//teleport to lactation lounge 
 	}
 
 	@Override
 	public void fail(Player p) {
 		p.changeQP(-2);
+		p.setRNumLocation(20);//teleport to lactation lounge 
 	}
 
 	/* (non-Javadoc)
@@ -28,8 +29,15 @@ public class Card16 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		retCA = CardAction.TELEPORT;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA.setResult("for 1 Craft Chip and teleport to the Milk Bar");
+		}else{
+			fail(p);
+			retCA.setResult("and fails; teleport to the Milk Bar");
+		}
+		return retCA;
 	}
 	
 }

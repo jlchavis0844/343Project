@@ -28,8 +28,18 @@ public class Card38 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA = CardAction.TELEPORT;
+			p.setRNumLocation(20);//set to milk bar
+			retCA.setResult("and gets 1 Craft Chip, and teleports to Milk Bar");
+		} else {
+			fail(p);
+			retCA = CardAction.TELEPORT;
+			p.setRNumLocation(20);//set to milk bar
+			retCA.setResult("and fails and teleports to Milk Bar");
+		}
+		return retCA;
 	}
-	
+
 }

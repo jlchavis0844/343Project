@@ -14,8 +14,8 @@ public class Card13 extends Card {
 
 	@Override
 	public void rewards(Player p) {
-		p.changeLearning(1);
-		//discard 1 game card for another learning chip
+		p.changeLearning(2);
+		//discard 1 game card 
 	}
 
 	@Override
@@ -28,8 +28,15 @@ public class Card13 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA = CardAction.DISCARD;
+			retCA.setResult("for 1 Learning Chip; discard a card for additional Learning Chip");
+		}else{
+			fail(p);
+			retCA.setResult("and fails");
+		}
+		return retCA;
 	}
 	
 }

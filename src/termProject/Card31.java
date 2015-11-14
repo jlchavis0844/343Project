@@ -4,15 +4,6 @@ import javax.swing.ImageIcon;
 
 public class Card31 extends Card {
 	
-	/* (non-Javadoc)
-	 * @see termProject.Card#play(termProject.Player)
-	 */
-	@Override
-	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
-	}
-
 	public Card31() {
 		super("Soccer Goalie",
 				new int[]{3,3,0},//learning, craft, integrity
@@ -30,7 +21,25 @@ public class Card31 extends Card {
 	@Override
 	public void fail(Player p) {
 		p.changeQP(-2);
-		//p.move(2);
+		p.setRNumLocation(2);//teleport to Student Parking
 	}
+	
+	/* (non-Javadoc)
+	 * @see termProject.Card#play(termProject.Player)
+	 */
+	@Override
+	public CardAction play(Player p) {
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA = CardAction.DRAW;
+			retCA.setResult("for 5 QP and 1 Game Card");
+		} else {
+			fail(p);
+			retCA = CardAction.TELEPORT;
+			retCA.setResult("and fails; teleport to Student Parking");
+		}
+		return retCA;
+	}
+
 	
 }

@@ -1,8 +1,8 @@
 package termProject;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Vector;
+import java.util.ArrayList;//masterDeck
+import java.util.Random;//for Random #
+import java.util.Vector;//return string vector
 
 import javax.swing.JTextArea;
 
@@ -18,26 +18,26 @@ import javax.swing.JTextArea;
 public class GameModel {
 	private PlayerList pList;//construct and contain all our players
 	private RoomList rList;//construct and contain all the rooms
-	private Deck liveDeck;
-	private Deck discardDeck;
-	private ArrayList<Card> masterDeck;
+	private Deck liveDeck;//curent playable cards
+	private Deck discardDeck;//discarded(already played cards)
+	private ArrayList<Card> masterDeck;//everycard
 
 	/**
 	 * Default constructor for the GameModel class
 	 */
 	public GameModel(){
-		pList = new PlayerList();
-		rList = new RoomList(21);
-		liveDeck = new Deck();
-		discardDeck = new Deck();
+		pList = new PlayerList();//make a list of players - pList
+		rList = new RoomList(21);//make a list of rooms - rList
+		liveDeck = new Deck();//for the current cards
+		discardDeck = new Deck();//used cards
 		
 		//start building master deck
-		masterDeck = new ArrayList<Card>();
-		makeMasterDeck(masterDeck);
+		masterDeck = new ArrayList<Card>();//all cards
+		makeMasterDeck(masterDeck);//load all cards
 		
 		//load current deck for the beginning of the game
 		loadRound1(liveDeck);
-		buildPlayerHand(pList.getHuman());	
+		buildPlayerHand(pList.getHuman());	//load cards into players hand
 	}
 
 	/**
@@ -74,17 +74,19 @@ public class GameModel {
 	 * @return Vector<String> describing AI choices
 	 */
 	public Vector<String> aiPlay(){
-		Vector<String> consoleMsg = new Vector<>(); 
-		Player tPlayer = pList.getCurrent(); 
+		checkDeck();//make sure there are cards in live deck
+		Vector<String> consoleMsg = new Vector<>(); //for printing to the console.
+		Player tPlayer = pList.getCurrent(); //for tracking
 		int moves = random(4); //how many moves the AI makes
+		//determine how many moves before playing card
 		switch(moves){
 			case 0:
 				// play card in current room
 				consoleMsg.add(aiPlayCard(tPlayer));
 				break;
 			case 1:
-				consoleMsg.add(moveRandom(tPlayer));
-				consoleMsg.add(aiPlayCard(tPlayer));
+				consoleMsg.add(moveRandom(tPlayer));//move once
+				consoleMsg.add(aiPlayCard(tPlayer));//play card
 				break;
 			case 2:
 				consoleMsg.add(moveRandom(tPlayer));
@@ -109,7 +111,10 @@ public class GameModel {
 	 * @return String message describing card action
 	 */
 	public String aiPlayCard(Player p){
-		String message; 
+		String message;
+		String playCard;
+		String aiName;
+		String result;
 		int currentRoom = p.getRNumLocation(); 
 		Card currentCard = null; 
 		
@@ -120,41 +125,48 @@ public class GameModel {
 			}
 		}
 		
-		String playCard = currentCard.getName();
-		String aiName = p.getPName();
-		message = "AI player "+aiName+" plays "+playCard+"\n";
 		
-		//CardAction as a result from card play
-		CardAction cAction = currentCard.play(p);	
+		CardAction cAction = currentCard.play(p);//CardAction as a result from card play
+		
+		liveDeck.discard(currentCard, discardDeck);//remove the played card from the liveDeck
+		
+		playCard = currentCard.getName();
+		aiName = p.getPName();
+		result = cAction.getResult();
+		message = "AI player "+aiName+" plays "+playCard+" "+result;
 		switch (cAction){
 			case DISCARD:
 				Card pCard = liveDeck.get(random(liveDeck.getCardCount()));
 				liveDeck.discard(pCard, discardDeck);
-				message += "AI player "+aiName+" discards "+pCard.getName()+"\n";
+				message += "\nAI player "+aiName+" discards "+pCard.getName();
 				break;	
 			case DRAW:
 				// nothing happens
-				message += "AI player "+aiName+" draws a card\n";
+				message += "\nAI player "+aiName+" draws a card";
+				break;
+			case DRAW2:
+				// nothing happens
+				message += "\nAI player "+aiName+" draws 2 cards";
 				break;	
 			case PICK:
 				int choice = random(3);	
 				if(choice == 0){ 
 					p.changeIntegrity(1);
-					message += "AI player "+aiName+" chooses Integrity Chip\n";
+					message += "\nAI player "+aiName+" chooses Integrity Chip";
 				}
 				else if(choice == 1){
 					p.changeCraft(1);
-					message += "AI player "+aiName+" chooses Craft Chip\n";
+					message += "\nAI player "+aiName+" chooses Craft Chip";
 				}
 				else{ 
 					p.changeLearning(1);
-					message += "AI player "+aiName+" chooses Learning Chip\n";
+					message += "\nAI player "+aiName+" chooses Learning Chip";
 				}
 				break;
 			case TELEPORT:
 				Room tRoom = rList.find(p.getRNumLocation());
 				pList.movePlayer(p, tRoom);
-				message += "AI player " +aiName+" teleports to "+tRoom.getRoomName() + "\n";
+				message += "\nAI player " +aiName+" teleports to "+tRoom.getRoomName();
 				break;
 			default:
 				System.out.println("");
@@ -174,8 +186,8 @@ public class GameModel {
 		String neighbors[] = rList.getNeighborNames(rIndex); //String array of neighbors list
 		rIndex = random(neighbors.length); //random index of neighbor array
 		Room tRoom = rList.find(neighbors[rIndex]); //save selected room
-		p.move(tRoom.getRoomNum()); //move player to the selected room
-		
+		//p.move(tRoom.getRoomNum()); //move player to the selected room
+		pList.movePlayer(p, tRoom);//moves AI player to tRoom
 		String message;
 		message = "AI player "+p.getPName()+" moves to "+tRoom.getRoomName();
 		return message;
@@ -292,7 +304,7 @@ public class GameModel {
 	 * builds a player's hand
 	 * 
 	 * <p>
-	 * Takes 8 cards from the live deck at random index locations
+	 * Takes 5 cards from the live deck at random index locations
 	 * and places them into a player's hand using discard() method
 	 * </p>
 	 * @param p
@@ -308,7 +320,6 @@ public class GameModel {
 			tBool = liveDeck.discard(tCard,playerHand);//discard temp card from livedeck and add to hand
 			System.out.println("adding card work? :" + tBool);
 		}
-		
 	}
 	
 	/**
@@ -338,5 +349,14 @@ public class GameModel {
 	
 	public ArrayList<Card> getMasterDeck(){
 		return masterDeck;
+	}
+	
+	public void checkDeck(){
+		if(liveDeck.getSize() == 0){
+			liveDeck = discardDeck;
+			liveDeck.shuffle();
+			discardDeck = new Deck();
+			System.out.println("reloading decks\n");
+		}
 	}
 }

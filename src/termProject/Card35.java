@@ -28,8 +28,16 @@ public class Card35 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation())){
+			rewards(p);
+			retCA.setResult("and gets 5 QP");
+		} else {
+			fail(p);
+			retCA = CardAction.TELEPORT;
+			retCA.setResult("fails and teleports to Student Parking");
+			p.setRNumLocation(2);//set to student parking
+		}
+		return retCA;
 	}
 	
 }

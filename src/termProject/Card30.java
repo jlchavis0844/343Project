@@ -19,8 +19,8 @@ public class Card30 extends Card {
 
 	@Override
 	public void fail(Player p) {
-		//lose 1 card
 		p.changeQP(-2);
+		//lose 1 card
 	}
 
 	/* (non-Javadoc)
@@ -28,8 +28,15 @@ public class Card30 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			retCA = CardAction.PICK;
+			retCA.setResult("for a Chip of choice");
+		} else {
+			fail(p);
+			retCA = CardAction.DISCARD;
+			retCA.setResult("and fails; discard 1 Game Card");
+		}
+		return retCA;
 	}
 	
 }

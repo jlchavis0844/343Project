@@ -7,7 +7,7 @@ public class Card02 extends Card {
 
 	public Card02() {
 		super("CECS 100",
-				new int[]{},//learning, craft, integrity
+				new int[]{0,0,0},//learning, craft, integrity
 				new int[]{14,17},//rooms you can play the card in
 				1,//year that the cards belong to
 				new ImageIcon(GameView.class.getResource("/termProject/graphics/card2.png")));		
@@ -15,7 +15,6 @@ public class Card02 extends Card {
 
 	@Override
 	public void rewards(Player p) {
-		p.changeQP(1);
 		p.changeLearning(1);
 	}
 
@@ -25,11 +24,14 @@ public class Card02 extends Card {
 	}
 
 	public CardAction play(Player p) {
-		
-		if(p.getRNumLocation() != 14 && p.getRNumLocation() != 17){
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA.setResult("for 1 learning chip");
+		} else {
 			fail(p);
-		} else rewards(p);
-		return CardAction.NONE;
+			retCA.setResult("and fails");
+		}
+		return retCA;
 	}
 }
 	

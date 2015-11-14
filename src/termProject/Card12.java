@@ -14,7 +14,8 @@ public class Card12 extends Card {
 
 	@Override
 	public void rewards(Player p) {
-		//p.changeLearning(1) or p.changeLearning(1);
+		//reward is given in the play for this card
+		//choice of learning or integrity
 	}
 
 	@Override
@@ -27,8 +28,15 @@ public class Card12 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			retCA = CardAction.PICK;
+			retCA.setExcluded("craft");
+			retCA.setResult("for 1 Learning Chip or 1 Craft Chip");
+		}else{
+			fail(p);
+			retCA.setResult("and fails");	
+		}
+		return retCA;
 	}
 	
 }

@@ -28,8 +28,15 @@ public class Card32 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA = CardAction.DRAW;
+			retCA.setResult("for 1 Learning Chip and 1 Game Card");
+		} else {
+			fail(p);
+			retCA.setResult("and fails");
+		}
+		return retCA;
 	}
 	
 }

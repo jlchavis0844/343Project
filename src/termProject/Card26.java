@@ -20,8 +20,8 @@ public class Card26 extends Card {
 
 	@Override
 	public void fail(Player p) {
-		//lose 1 card
 		p.changeQP(-2);
+		//discard a game card
 	}
 
 	/* (non-Javadoc)
@@ -29,8 +29,16 @@ public class Card26 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA = CardAction.PICK;
+			retCA.setResult("for 3 QP and a Chip of choice");
+		} else {
+			fail(p);
+			retCA = CardAction.DISCARD;
+			retCA.setResult("and fails; discard 1 Game Card");
+		}
+		return retCA;
 	}
 	
 }

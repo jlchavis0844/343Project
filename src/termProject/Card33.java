@@ -21,7 +21,7 @@ public class Card33 extends Card {
 	@Override
 	public void fail(Player p) {
 		p.changeQP(-5);
-		//p.move(20);
+		//teleport to Milk Bar
 	}
 
 	/* (non-Javadoc)
@@ -29,8 +29,17 @@ public class Card33 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA = CardAction.DRAW2;
+			retCA.setResult("for 5 QP and 2 Game Cards");
+		} else {
+			fail(p);
+			retCA = CardAction.TELEPORT;
+			retCA.setResult("Failed, teleporting to milk bar");
+			p.setRNumLocation(20);//to the milk bar!
+		}
+		return retCA;
 	}
 	
 }

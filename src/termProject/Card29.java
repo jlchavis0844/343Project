@@ -27,8 +27,14 @@ public class Card29 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			retCA = CardAction.PICK;
+			retCA.setResult("for a Chip of choice");
+		} else {
+			fail(p);
+			retCA.setResult("and fails");
+		}
+		return retCA;
 	}
 	
 }

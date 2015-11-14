@@ -6,7 +6,7 @@ public class Card03 extends Card {
 	
 	public Card03() {
 		super("The Outpost",
-				new int[]{},//learning, craft, integrity
+				new int[]{0,0,0},//learning, craft, integrity
 				new int[]{0,1,2,3,4,5,7,8,9,10},//rooms you can play the card in
 				1, //year that the cards belong to
 				new ImageIcon(GameView.class.getResource("/termProject/graphics/card3.png")));		
@@ -14,7 +14,7 @@ public class Card03 extends Card {
 
 	@Override
 	public void rewards(Player p) {
-		p.changeQP(1);
+		// chip of choice
 	}
 
 	@Override
@@ -23,13 +23,15 @@ public class Card03 extends Card {
 	}
 
 	public CardAction play(Player p) {
-		if(roomCheck(p.getRNumLocation())){
-			rewards(p);
-			return CardAction.PICK;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			retCA = CardAction.PICK;
+			retCA.setResult("for a Chip of choice");
+			
 		} else {
 			fail(p);
-			return CardAction.NONE;
+			retCA.setResult("and fails");
 		}
+		return retCA;
 	}
 	
 }

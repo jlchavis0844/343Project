@@ -80,11 +80,12 @@ public class GameView extends JFrame{
 		setBounds(10, 10, 1900, 1060);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setPreferredSize(new Dimension(1900,360));
 		
 		//build scroll panel for the console
 		boardBack = new JLabel("Game Background");
 		boardBack.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/CSULBMap3.png")));
-		boardBack.setPreferredSize(new Dimension(boardBack.getIcon().getIconWidth(),boardBack.getIcon().getIconHeight()));
+		//boardBack.setPreferredSize(new Dimension(boardBack.getIcon().getIconWidth(),boardBack.getIcon().getIconHeight()));
 		backgroundScrollPane = new JScrollPane();
 		boardBack.setLabelFor(backgroundScrollPane);
 		backgroundScrollPane.setViewportView(boardBack);
@@ -128,7 +129,7 @@ public class GameView extends JFrame{
 				.addGroup(groupLayout.createSequentialGroup()
 					.addComponent(backgroundScrollPane, GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(infoScrollPane, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
+					.addComponent(infoScrollPane, GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		getContentPane().setLayout(groupLayout);
@@ -163,7 +164,7 @@ public class GameView extends JFrame{
 		//creates a label to display the card being played
 		cardLabel = new JLabel("Image Not Found");
 		cardLabel.setToolTipText("Click to cylce cards");
-		cardLabel.setBounds(129, 62, 207, 275);
+		cardLabel.setBounds(129, 38, 207, 275);
 		deckPanel.add(cardLabel);
 		cardLabel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		cardLabel.setIcon(new ImageIcon(GameView.class.getResource("/termProject/graphics/card1.png")));
@@ -173,18 +174,19 @@ public class GameView extends JFrame{
 		btnTestButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				/*ChipPicker cp = new ChipPicker(model.getpList().getHuman());
+				ChipPicker cp = new ChipPicker(model.getpList().getHuman(), null);
 				model.updateInfo(infoBox);
-				toConsole(cp.getChoiceStr());*/
+				toConsole(cp.getChoiceStr());
 
 				/*DiscardDiag dis = new DiscardDiag(model.getpList().getHuman(), model.getDiscardDeck());
 				model.updateInfo(infoBox);
 				toConsole(dis.getMessage());
 				refreshCards(model.getpList().getHuman().getHand());*/
 				
-				Player hPlayer = model.getpList().getHuman();
+				/*Player hPlayer = model.getpList().getHuman();
+				hPlayer.move(7);
 				CardAction message = model.getMasterDeck().get(5).play(hPlayer);
-				new ChipPicker(hPlayer,message.getExcluded());//launch chip picker dialog
+				new ChipPicker(hPlayer,message.getExcluded());//launch chip picker dialog*/
 				
 			}
 		});
@@ -204,10 +206,11 @@ public class GameView extends JFrame{
 		deckTitle.setFont(new Font("Tahoma", Font.BOLD, 16));
 		deckTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		deckTitle.setLabelFor(cardLabel);
-		deckTitle.setBounds(129, 35, 207, 24);
+		deckTitle.setBounds(129, 11, 207, 24);
 		deckPanel.add(deckTitle);
 		
 		JTextArea txtpnListOfCards = new JTextArea();
+		txtpnListOfCards.setEditable(false);
 		txtpnListOfCards.setFont(new Font("Tahoma", Font.BOLD, 16));
 		txtpnListOfCards.setBackground(SystemColor.menu);
 		txtpnListOfCards.setLineWrap(true);
@@ -218,9 +221,9 @@ public class GameView extends JFrame{
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(10)
+					.addContainerGap()
 					.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-					.addGap(6)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
 						.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
@@ -238,25 +241,26 @@ public class GameView extends JFrame{
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(6)
-							.addComponent(moveBox, GroupLayout.PREFERRED_SIZE, 323, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(66)
 							.addComponent(drawBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
 							.addGap(5)
 							.addComponent(moveBtn, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
 							.addGap(5)
 							.addComponent(pCardBtn, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
-							.addGap(31)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnTestButton))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(6)
-							.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(28)
-							.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-							.addGap(14)
-							.addComponent(consoleScrollPane, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+							.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+								.addGap(6)
+								.addComponent(moveBox, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+								.addGap(6)
+								.addComponent(deckPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+								.addGap(28)
+								.addComponent(infoBox, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+								.addGap(14)
+								.addComponent(consoleScrollPane, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))))
 					.addGap(6))
 		);
 		contentPane.setLayout(gl_contentPane);

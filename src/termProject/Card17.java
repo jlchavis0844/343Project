@@ -14,12 +14,11 @@ public class Card17 extends Card {
 
 	@Override
 	public void rewards(Player p) {
-		p.changeQP(3);
+		p.changeQP(5);
 	}
 
 	@Override
 	public void fail(Player p) {
-		//lose 1 card
 		p.changeQP(-3);
 	}
 
@@ -28,8 +27,15 @@ public class Card17 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA.setResult("for 5 QP");
+		}else{
+			fail(p);
+			retCA = CardAction.DISCARD;
+			retCA.setResult("and fails; discard 1 Game Card");
+		}
+		return retCA;
 	}
 	
 }

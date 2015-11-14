@@ -19,8 +19,8 @@ public class Card04 extends Card {
 
 	@Override
 	public void fail(Player p) {
-		//lose 1 card
 		p.changeQP(-2);
+		//lose 1 card
 	}
 
 	/* (non-Javadoc)
@@ -30,13 +30,13 @@ public class Card04 extends Card {
 	public CardAction play(Player p) {
 		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
 			rewards(p);
-			//p.setRNumLocation(3);
-			return CardAction.NONE;
+			retCA.setResult("for 10 QP");
 		} else {
 			fail(p);
-			return CardAction.DISCARD;
+			retCA = CardAction.DISCARD;
+			retCA.setResult("and fails; discard 1 Game Card");
 		}
-		
+		return retCA;
 		
 	}
 	

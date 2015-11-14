@@ -20,7 +20,7 @@ public class Card19 extends Card {
 	@Override
 	public void fail(Player p) {
 		p.changeQP(-2);
-		//p.move(13);
+		p.setRNumLocation(13);//teleport to RoR
 	}
 
 	/* (non-Javadoc)
@@ -28,8 +28,15 @@ public class Card19 extends Card {
 	 */
 	@Override
 	public CardAction play(Player p) {
-		// TODO Auto-generated method stub
-		return CardAction.NONE;
+		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
+			rewards(p);
+			retCA.setResult("for 2 Craft Chips");
+		} else {
+			fail(p);
+			retCA = CardAction.TELEPORT;
+			retCA.setResult("and fails; teleport to Room of Retirement");
+		}
+		return retCA;
 	}
 	
 }
