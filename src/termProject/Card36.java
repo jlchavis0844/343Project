@@ -30,11 +30,11 @@ public class Card36 extends Card {
 	public CardAction play(Player p) {
 		if(roomCheck(p.getRNumLocation()) && prereqCheck(p)){
 			retCA = CardAction.PICK;
-			retCA.setResult("and gets 3 qp and a card of choice");
+			retCA.setResult("and gets 3 qp and a Chip of choice");
 			rewards(p);
 		} else {
 			fail(p);
-			retCA.setResult("fails");
+			retCA.setResult("and fails");
 		}
 		return retCA;
 	}

@@ -9,7 +9,8 @@ public class Card19 extends Card {
 				new int[]{0,0,4},//learning, craft, integrity
 				new int[]{0},//rooms you can play the card in
 				1,//year that the cards belong to
-				new ImageIcon(GameView.class.getResource("/termProject/graphics/card19.png")));			
+				new ImageIcon(GameView.class.getResource("/termProject/graphics/card19.png")));
+				replaceable = true;
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
 
+import javax.naming.SizeLimitExceededException;
 import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -64,11 +65,14 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			Player currentPlayer = getHuman();
 			System.out.println(currentPlayer.getPName() + " plays ''" + getCurrentCard().getName() + "''" );
 			CardAction message = getCurrentCard().play(getHuman());//plays the card with the human
-            //************** print card play result to console **************
+			
+			//print the card play result to console
 			String tCard = getCurrentCard().getName();//current card's name
 			String result = message.getResult();//store result for printing
-			view.toConsole(getHuman().getPName()+" plays card "+tCard+" "+result);//write to view's console
+			view.toConsole(getHuman().getPName()+" plays "+tCard+" "+result);//write to view's console
+			
 			getHuman().getHand().discard(getCurrentCard(), model.getDiscardDeck());//discard currentCard
+			
 			//process return cardAction
 			switch (message){
 				case DISCARD:
@@ -96,7 +100,7 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 					break;
 					
 				case PICK:
-					message.getExcluded();
+					//message.getExcluded();
 					new ChipPicker(getHuman(),message.getExcluded());//launch chip picker dialog
 					break;
 					
@@ -112,16 +116,18 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 					break;
 			
 			}
-			
+			message.setExcluded(null);//reset excluded chip button
+			message = CardAction.NONE;//reset CardAction after the card is played
 
-			
 			view.refreshCards(getHuman().getHand());
+			/*
 			model.updateInfo(view.getInfoBox());
 			if(getHuman().getHand().isFull() || model.getLiveDeck().getSize() == 0){
 				view.setDrawButtonStatus(false);
 			} else {
 				view.setDrawButtonStatus(true);
 			}
+			*/
 			endHumanTurn();
 			
 		} else if(e.getActionCommand() == "Draw New Card"){//if draw new card button is triggered
@@ -192,6 +198,7 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			}
 		}
 		model.updateInfo(view.getInfoBox());
+		model.checkRound1();
 		startHumanTurn();//ends AI, starts human term.
 		
 	}
@@ -200,10 +207,11 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 	 * Disables buttons for the human turn until
 	 * the human player draws a card
 	 */
-	private void startHumanTurn(){//turn off everything
+	private void startHumanTurn(){//turn off everything except draw button
 		view.setMoveButtonStatus(false);
 		view.setPlayButtonStatus(false);
 		view.setMoveBoxStatus(false);
+		view.setDrawButtonStatus(true);
 		model.checkDeck();
 	}
 	

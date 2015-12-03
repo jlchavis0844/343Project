@@ -156,4 +156,6 @@ public abstract class Player {
 	}
 
 	public abstract Hand getHand();
+	
+	public abstract void emptyHand();
 }

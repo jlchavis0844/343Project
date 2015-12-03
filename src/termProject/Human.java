@@ -21,4 +21,8 @@ public class Human extends Player{
 	public Hand getHand(){
 		return pHand;
 	}
+	
+	public void emptyHand(){
+		pHand = new Hand();
+	}
 }

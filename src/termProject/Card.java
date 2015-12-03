@@ -1,6 +1,8 @@
 package termProject;
 
 import javax.swing.ImageIcon;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 /**
  * Card abstract class and attributes
@@ -13,7 +15,12 @@ public abstract class Card {
 	private int prereqRoom[]; //holds the room prerequisites as room numbers
 	private int year; //year in which the card is played
 	private ImageIcon img; //card image
-	protected CardAction retCA;
+	protected CardAction retCA;//card action is returned to controller
+	String rewardStr = "play.mp3";
+	String failStr = "fali.mp3";
+	MediaPlayer mediaPlayer;
+	boolean replaceable = false;
+	
 	
 	/**
 	 * Constructor with name, skill prerequisites, room prerequisites, and year
@@ -32,7 +39,7 @@ public abstract class Card {
 		prereqRoom = pr;
 		year = y;
 		img = i;
-		retCA = CardAction.NONE;
+		retCA = CardAction.NONE;		
 	}
 
 	/**
@@ -153,5 +160,9 @@ public abstract class Card {
 			p.getIntegrity() < prereqSkill[Chips.INTEGRITY.ordinal()]){
 			return false;
 		} else return true;
+	}
+	
+	public boolean isReplaceable(){
+		return replaceable;
 	}
 }

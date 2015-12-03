@@ -21,6 +21,12 @@ public class AI extends Player{
 		return null;
 	}
 
+	@Override
+	public void emptyHand() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 	

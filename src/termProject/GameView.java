@@ -23,12 +23,16 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import com.sun.javafx.geom.Rectangle;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.nio.file.Paths;
 import java.util.Vector;
 
 /**
@@ -174,19 +178,23 @@ public class GameView extends JFrame{
 		btnTestButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				ChipPicker cp = new ChipPicker(model.getpList().getHuman(), null);
+				/*ChipPicker cp = new ChipPicker(model.getpList().getHuman(), null);
 				model.updateInfo(infoBox);
 				toConsole(cp.getChoiceStr());
 
-				/*DiscardDiag dis = new DiscardDiag(model.getpList().getHuman(), model.getDiscardDeck());
+				DiscardDiag dis = new DiscardDiag(model.getpList().getHuman(), model.getDiscardDeck());
 				model.updateInfo(infoBox);
 				toConsole(dis.getMessage());
-				refreshCards(model.getpList().getHuman().getHand());*/
+				refreshCards(model.getpList().getHuman().getHand());
 				
 				/*Player hPlayer = model.getpList().getHuman();
 				hPlayer.move(7);
 				CardAction message = model.getMasterDeck().get(5).play(hPlayer);
 				new ChipPicker(hPlayer,message.getExcluded());//launch chip picker dialog*/
+				String bip = Paths.get("reward.wav").toUri().toString();
+				Media hit = new Media(bip);
+				MediaPlayer mediaPlayer = new MediaPlayer(hit);
+				mediaPlayer.play();
 				
 			}
 		});

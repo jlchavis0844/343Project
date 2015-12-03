@@ -169,7 +169,16 @@ public class PlayerList {
 		if(++current >= players.length) current = 0;//check if player index out of bounds, set to first if so
 	}
 	
-	
+	/**
+	 * @return total QP of all the players
+	 */
+	public int getTotalQP(){
+		int totalQP = 0;
+		for(int i = 0; i < players.length; i++){
+			totalQP += players[i].getQP();
+		}
+		return totalQP;
+	}
 	
 	
 }//end class

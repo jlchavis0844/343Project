@@ -33,7 +33,7 @@ public class RoomList {
 		rList[7]  = new Room(20, 1720,"Library",7);
 		rList[7].addNeighbor(new int[]{8,4});
 		rList[8]  = new Room(480, 1780,"LA 5",8);
-		rList[8].addNeighbor(new int[]{7,9});
+		rList[8].addNeighbor(new int[]{7,9,16});
 		rList[9]  = new Room(1160, 1670, "Bratwurst Hall",9);
 		rList[9].addNeighbor(new int[]{10,8});
 		rList[10]  = new Room(1450, 963,"East Walkway",10);
@@ -45,11 +45,11 @@ public class RoomList {
 		rList[13]  = new Room(175, 1330, "Room of Retirement",13);
 		rList[13].addNeighbor(new int[]{12});
 		rList[14]  = new Room(590, 910,"ECS 302",14);
-		rList[14].addNeighbor(new int[]{12});
+		rList[14].addNeighbor(new int[]{12,15});
 		rList[15]  = new Room(820, 1150,"South Hall",15);
 		rList[15].addNeighbor(new int[]{14,18,19,10,20,17,12});
 		rList[16]  = new Room(590, 1390, "Elevators",16);
-		rList[16].addNeighbor(new int[]{12});
+		rList[16].addNeighbor(new int[]{8,12});
 		rList[17]  = new Room(800, 1375,"ECS 308",17);
 		rList[17].addNeighbor(new int[]{15});
 		rList[18]  = new Room(1020, 875, "EAT Club",18);

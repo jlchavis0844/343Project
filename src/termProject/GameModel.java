@@ -37,7 +37,7 @@ public class GameModel {
 		
 		//load current deck for the beginning of the game
 		loadRound1(liveDeck);
-		buildPlayerHand(pList.getHuman());	//load cards into players hand
+		buildPlayerHand(pList.getHuman());//load cards into players hand
 	}
 
 	/**
@@ -89,15 +89,15 @@ public class GameModel {
 				consoleMsg.add(aiPlayCard(tPlayer));//play card
 				break;
 			case 2:
-				consoleMsg.add(moveRandom(tPlayer));
-				consoleMsg.add(moveRandom(tPlayer));
-				consoleMsg.add(aiPlayCard(tPlayer));
+				consoleMsg.add(moveRandom(tPlayer));//move once
+				consoleMsg.add(moveRandom(tPlayer));//move once
+				consoleMsg.add(aiPlayCard(tPlayer));//play card
 				break;
 			case 3:
-				consoleMsg.add(moveRandom(tPlayer));
-				consoleMsg.add(moveRandom(tPlayer));
-				consoleMsg.add(moveRandom(tPlayer));
-				consoleMsg.add(aiPlayCard(tPlayer));
+				consoleMsg.add(moveRandom(tPlayer));//move once
+				consoleMsg.add(moveRandom(tPlayer));//move once
+				consoleMsg.add(moveRandom(tPlayer));//move once
+				consoleMsg.add(aiPlayCard(tPlayer));//play card
 				break;
 		}
 		pList.setNextPlayer();
@@ -111,13 +111,14 @@ public class GameModel {
 	 * @return String message describing card action
 	 */
 	public String aiPlayCard(Player p){
-		String message;
-		String playCard;
-		String aiName;
-		String result;
-		int currentRoom = p.getRNumLocation(); 
+		String message;//message to print to console
+		String playCard;//name of the card played
+		String aiName;//name of the ai player
+		String result;//result of playing the card
+		int currentRoom = p.getRNumLocation();//room number of the current location 
 		Card currentCard = null; 
 		
+		//find a card in the liveDeck that satisfies room prereq
 		for(int i = 0; i < liveDeck.getCardCount(); i++){ 
 			currentCard = liveDeck.get(i);
 			if(currentCard.roomCheck(currentRoom)){ 
@@ -125,19 +126,18 @@ public class GameModel {
 			}
 		}
 		
-		
 		CardAction cAction = currentCard.play(p);//CardAction as a result from card play
-		
 		liveDeck.discard(currentCard, discardDeck);//remove the played card from the liveDeck
 		
-		playCard = currentCard.getName();
-		aiName = p.getPName();
-		result = cAction.getResult();
+		playCard = currentCard.getName();//name of the card played
+		aiName = p.getPName();//name of the ai player
+		result = cAction.getResult();//result of playing the card
 		message = "AI player "+aiName+" plays "+playCard+" "+result;
+		
 		switch (cAction){
 			case DISCARD:
-				Card pCard = liveDeck.get(random(liveDeck.getCardCount()));
-				liveDeck.discard(pCard, discardDeck);
+				Card pCard = liveDeck.get(random(liveDeck.getCardCount()));//select a random card from the deck
+				liveDeck.discard(pCard, discardDeck);//discard the random card
 				message += "\nAI player "+aiName+" discards "+pCard.getName();
 				break;	
 			case DRAW:
@@ -149,18 +149,49 @@ public class GameModel {
 				message += "\nAI player "+aiName+" draws 2 cards";
 				break;	
 			case PICK:
-				int choice = random(3);	
-				if(choice == 0){ 
-					p.changeIntegrity(1);
-					message += "\nAI player "+aiName+" chooses Integrity Chip";
-				}
-				else if(choice == 1){
-					p.changeCraft(1);
-					message += "\nAI player "+aiName+" chooses Craft Chip";
-				}
-				else{ 
-					p.changeLearning(1);
-					message += "\nAI player "+aiName+" chooses Learning Chip";
+				if(cAction.getExcluded()==null){ //choice of 3 chips
+					int choice = random(3);	//random number 0-2
+					if(choice == 0){ 
+						p.changeIntegrity(1);
+						message += "\nAI player "+aiName+" chooses Integrity Chip";
+					}
+					else if(choice == 1){
+						p.changeCraft(1);
+						message += "\nAI player "+aiName+" chooses Craft Chip";
+					}
+					else{ 
+						p.changeLearning(1);
+						message += "\nAI player "+aiName+" chooses Learning Chip";
+					}
+				} else { //choice of 2 chips
+					int choice = random(2); //random number 0-1
+					if(cAction.getExcluded()=="integrity"){ //craft or learning
+						if(choice==0){
+							p.changeCraft(1);
+							message += "\nAI player "+aiName+" chooses Craft Chip";
+						} else {
+							p.changeLearning(1);
+							message += "\nAI player "+aiName+" chooses Learning Chip";
+						}
+					}
+					else if(cAction.getExcluded()=="craft"){ //integrity or learning
+						if(choice==0){
+							p.changeIntegrity(1);
+							message += "\nAI player "+aiName+" chooses Integrity Chip";
+						} else {
+							p.changeLearning(1);
+							message += "\nAI player "+aiName+" chooses Learning Chip";
+						}
+					}
+					else{ //integrity or craft
+						if(choice==0){
+							p.changeIntegrity(1);
+							message += "\nAI player "+aiName+" chooses Integrity Chip";
+						} else {
+							p.changeCraft(1);
+							message += "\nAI player "+aiName+" chooses Craft Chip";
+						}
+					}
 				}
 				break;
 			case TELEPORT:
@@ -172,7 +203,8 @@ public class GameModel {
 				System.out.println("");
 				break;
 		}
-		
+		cAction.setExcluded(null);//reset excluded chip
+		cAction = null;//reset cardAction after the card is played
 		return message;
 	}
 	
@@ -246,10 +278,11 @@ public class GameModel {
 	 * @param d Deck where the cards will be copied to
 	 */
 	public void loadRound1(Deck d){
-	//round 1 will be the first 4 cards (0-3) for test purposes
-		int key = 40; //easier to change later
-		for (int i = 0; i < key; i++){
-			d.addCard(masterDeck.get(i));//add index i to Deck d
+		//load all year one cards from master deck into d
+		for(int i = 0; i < masterDeck.size(); i++){
+			if(masterDeck.get(i).getYear() == 1){
+				d.addCard(masterDeck.get(i));
+			}
 		}
 	}
 	
@@ -298,6 +331,18 @@ public class GameModel {
 		md.add(new Card38());
 		md.add(new Card39());
 		md.add(new Card40());
+		md.add(new Card41());
+		md.add(new Card42());
+		md.add(new Card43());
+		md.add(new Card44());
+		md.add(new Card45());
+		md.add(new Card46());
+		md.add(new Card47());
+		md.add(new Card48());
+		md.add(new Card49());
+		md.add(new Card50());
+		md.add(new Card51());
+		md.add(new Card52());
 	}
 	
 	/**
@@ -351,6 +396,10 @@ public class GameModel {
 		return masterDeck;
 	}
 	
+	/**
+	 * Check if the liveDeck is empty. If so, take the cards from
+	 * discardDeck and reshuffle. Set liveDeck to a new empty Deck.
+	 */
 	public void checkDeck(){
 		if(liveDeck.getSize() == 0){
 			liveDeck = discardDeck;
@@ -359,4 +408,32 @@ public class GameModel {
 			System.out.println("reloading decks\n");
 		}
 	}
+	
+	/**
+	 * Check if the total QP of all players has reached 60.
+	 * If Round 1 is complete, empty the liveDeck, discardDeck,
+	 * and human player's hand; start Round 2.
+	 */
+	public void checkRound1(){
+		if(pList.getTotalQP() >= 60){
+			liveDeck = new Deck();
+			discardDeck = new Deck();
+			pList.getHuman().emptyHand();
+			loadRound2(liveDeck);
+		}
+		
+	}
+	
+	/**
+	 * Load Round 2 cards to liveDeck and new hand to human player
+	 */
+	public void loadRound2(Deck d){
+		for (int i = 0; i < masterDeck.size(); i++){
+			if(!masterDeck.get(i).isReplaceable()){
+				d.addCard(masterDeck.get(i));//add index i to Deck d
+			}
+		}
+		buildPlayerHand(pList.getHuman());//load cards into players hand	
+	}
+	
 }
