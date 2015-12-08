@@ -198,7 +198,9 @@ public class GameController implements ActionListener, ListSelectionListener, Mo
 			}
 		}
 		model.updateInfo(view.getInfoBox());
-		model.checkRound1();
+		if(model.checkRound1()){
+			view.errorDialog("going to round 2");
+		}
 		startHumanTurn();//ends AI, starts human term.
 		
 	}

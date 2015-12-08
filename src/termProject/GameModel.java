@@ -414,14 +414,15 @@ public class GameModel {
 	 * If Round 1 is complete, empty the liveDeck, discardDeck,
 	 * and human player's hand; start Round 2.
 	 */
-	public void checkRound1(){
-		if(pList.getTotalQP() >= 60){
+	public boolean checkRound1(){
+		if(pList.getTotalQP() >= 6){
 			liveDeck = new Deck();
 			discardDeck = new Deck();
 			pList.getHuman().emptyHand();
 			loadRound2(liveDeck);
+			return true;
 		}
-		
+		return false;
 	}
 	
 	/**
